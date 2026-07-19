@@ -26,7 +26,7 @@ import type {
 } from '@/types/character'
 import { MAX_POWER_SLOTS, MAX_TALENT_SLOTS, PRIMARY_ABILITY_KEYS } from '@/types/character'
 import type { RandomRanksColumn } from '@/types/reference'
-import { pickFromRanges, pickUniform, rollRange } from './dice'
+import { pickFromRanges, pickUniform } from './dice'
 import { rankTier } from '@/data/ranks'
 import { PHYSICAL_FORMS, physicalFormByName } from '@/data/physicalForms'
 import { abilityBonusForForm, secondaryBonusForForm, powerCountBonusForForm } from '@/data/physicalFormBonuses'
@@ -35,6 +35,7 @@ import { ORIGINS } from '@/data/origins'
 import { OCCUPATIONS } from '@/data/occupations'
 import { WEAKNESS_STIMULUS, WEAKNESS_EFFECT, WEAKNESS_DURATION } from '@/data/weaknesses'
 import { rankRangesForColumn } from '@/data/randomRanksTable'
+import { POWERS_COUNT_TABLE, TALENTS_COUNT_TABLE } from '@/data/countTables'
 import { POWERS, powerByName } from '@/data/powers'
 import { TALENTS, talentByName } from '@/data/talents'
 
@@ -116,9 +117,11 @@ export function rollWeakness(): Weakness {
 // ---------------------------------------------------------------------------
 // Powers
 //
-// Mocked: how many Powers a character starts with isn't in the provided
-// rules.pdf excerpt (PLAN.md §6) -- placeholder: 1-7 powers. A rolled Power's
-// starting rank uses the real Random Ranks Table, column 4.
+// How many Powers a character starts with uses the real book table
+// (countTables.ts, POWERS_COUNT_TABLE -- rules.pdf ~page 14): a single d100
+// roll looks up both `current` and the growth ceiling `max` together, rather
+// than rolling them independently. A rolled Power's starting rank uses the
+// real Random Ranks Table, column 4.
 
 /** Flat +/- Power count some races grant, e.g. Deity's "Two additional
  * Powers" or a Modified Human's "One less Power initially". See
@@ -129,10 +132,9 @@ export function racialPowerCountBonus(physicalFormName: string): number {
 
 export function rollPowerCount(physicalFormName: string): { current: number; max: number } {
   const bonus = racialPowerCountBonus(physicalFormName)
-  const rawMax = rollRange(4, MAX_POWER_SLOTS)
-  const rawCurrent = rollRange(1, rawMax)
-  const max = Math.min(MAX_POWER_SLOTS, Math.max(1, rawMax + bonus))
-  const current = Math.min(max, Math.max(0, rawCurrent + bonus))
+  const roll = pickFromRanges(POWERS_COUNT_TABLE)
+  const max = Math.min(MAX_POWER_SLOTS, Math.max(1, roll.cap + bonus))
+  const current = Math.min(max, Math.max(0, roll.current + bonus))
   return { current, max }
 }
 
@@ -207,13 +209,12 @@ export function rollDefaultPowers(physicalFormName: string): DefaultPowerRoll[] 
 // ---------------------------------------------------------------------------
 // Talents
 //
-// Mocked: the talent-count table isn't in the provided excerpt either.
-// Placeholder: 1-4 talents (matches the screenshot's "1/4").
+// How many Talents a character starts with uses the real book table
+// (countTables.ts, TALENTS_COUNT_TABLE -- rules.pdf ~page 14), same as Powers.
 
 export function rollTalentCount(): { current: number; max: number } {
-  const max = rollRange(2, MAX_TALENT_SLOTS)
-  const current = rollRange(1, max)
-  return { current, max }
+  const roll = pickFromRanges(TALENTS_COUNT_TABLE)
+  return { current: roll.current, max: roll.cap }
 }
 
 export function rollTalent(slot: number): TalentSlot {

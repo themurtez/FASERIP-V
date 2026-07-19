@@ -109,7 +109,10 @@ export interface PowerSlot {
   locked: boolean
 }
 
-export const MAX_POWER_SLOTS = 16
+// The Powers count table (countTables.ts) tops out at 18 (roll "00"), and
+// the largest racial Power-count bonus is Deity's +2 -- so 20 slots covers
+// every reachable combination with no clamping needed.
+export const MAX_POWER_SLOTS = 20
 
 export interface PowersSection {
   count: { current: number; max: number; locked: boolean }
