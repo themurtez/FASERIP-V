@@ -1,0 +1,1479 @@
+[
+  {
+    "category": "Alternative Sciences",
+    "categorySlug": "Alt_Sci",
+    "roll": "01-25",
+    "name": "Catastrophism",
+    "description": "The scientific belief system that attempts to pinpoint the end of the world or at least major catastrophes that could signifantly alter man's or the universe's history."
+  },
+  {
+    "category": "Alternative Sciences",
+    "categorySlug": "Alt_Sci",
+    "roll": "26-50",
+    "name": "Cryonics",
+    "description": "The pratice of freezing a dead diseased person in hopes of bringing him back in the future when the cure is found."
+  },
+  {
+    "category": "Alternative Sciences",
+    "categorySlug": "Alt_Sci",
+    "roll": "51-75",
+    "name": "Paranormal Phenomena",
+    "description": "The study of Paranormal Phenomena from a scientific standpoint."
+  },
+  {
+    "category": "Alternative Sciences",
+    "categorySlug": "Alt_Sci",
+    "roll": "76-00",
+    "name": "Parapsychology",
+    "description": "The study of psionics"
+  },
+  {
+    "category": "Astronomy",
+    "categorySlug": "Astronomy",
+    "roll": "01-20",
+    "name": "Astronautics",
+    "description": "The science of the contruction and design of vehicles for travel in space beyond earth's atmosphere."
+  },
+  {
+    "category": "Astronomy",
+    "categorySlug": "Astronomy",
+    "roll": "21-40",
+    "name": "Astrophotography",
+    "description": ""
+  },
+  {
+    "category": "Astronomy",
+    "categorySlug": "Astronomy",
+    "roll": "41-60",
+    "name": "Astrophysics",
+    "description": "Deals with the chemical and physical composition of celestial matter."
+  },
+  {
+    "category": "Astronomy",
+    "categorySlug": "Astronomy",
+    "roll": "61-80",
+    "name": "Radio Astronomy",
+    "description": "Astronomy dealing with electromagnetic radiations of radio frequency received from outside earth's atmosphere."
+  },
+  {
+    "category": "Astronomy",
+    "categorySlug": "Astronomy",
+    "roll": "81-00",
+    "name": "Stellar Cartography",
+    "description": "Mapping space."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "01-05",
+    "name": "Anatomy",
+    "description": ""
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "06-10",
+    "name": "Animal Behaviour",
+    "description": ""
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "11-15",
+    "name": "Bio-Physics",
+    "description": "The application of physical principles to biological problems."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "16-21",
+    "name": "Biotechnology",
+    "description": "Application to biological and medical science of engineering principles or engineering equipment (as in the construction of artificial organs and bionics)."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "22-26",
+    "name": "Botany",
+    "description": "The study of plant life."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "27-31",
+    "name": "Ecology",
+    "description": "The interrelationship of organisms and their environment."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "32-37",
+    "name": "Genetics",
+    "description": "A branch of biology dealing with hereditary and variation of organisms. Genetics allows the recognition of signs of genetic tampering, ability to note genetic abnormalities, and conduct genetic experiments or projects."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "38-42",
+    "name": "Immunology",
+    "description": "The science dealing with the phenomena and causes of immunity and immune responses."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "43-48",
+    "name": "Marine Biology",
+    "description": ""
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "49-54",
+    "name": "Micro-Biology",
+    "description": "The study of microscopic forms of life."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "55-61",
+    "name": "Neurosciences",
+    "description": "Deals with nerves and nerve tissue and their relation to behavior and learning."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "62-67",
+    "name": "Parasitology",
+    "description": "The study of parasites on living creatures."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "68-73",
+    "name": "Pharmacology",
+    "description": "The science of drugs including materia medica, toxicology, and therapeutic."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "74-79",
+    "name": "Phenology",
+    "description": "The study of the reaction of species to environmental phenomenon."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "80-85",
+    "name": "Physiology",
+    "description": "Deals with the functions of living matter and of the physical and chemical phenomena."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "86-90",
+    "name": "Psychobiology",
+    "description": "The study of mental life and behavior in relation to other biological processes."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "91-95",
+    "name": "Radiobiology",
+    "description": "Deals with the interaction of biological systems and radiant energy or radioactive materials."
+  },
+  {
+    "category": "Biology",
+    "categorySlug": "Biology",
+    "roll": "96-00",
+    "name": "Zoology",
+    "description": ""
+  },
+  {
+    "category": "Chemistry",
+    "categorySlug": "Chemistry",
+    "roll": "01-11",
+    "name": "Alchemy",
+    "description": "A medieval chemical science and speculative philosophy aiming to achieve the transmutation of the base elements into gold, the discovery of a universal cure for disease, and the discovery of a means of indefinitely prolonging life."
+  },
+  {
+    "category": "Chemistry",
+    "categorySlug": "Chemistry",
+    "roll": "12-24",
+    "name": "Chemical and Biological Weapons",
+    "description": ""
+  },
+  {
+    "category": "Chemistry",
+    "categorySlug": "Chemistry",
+    "roll": "25-37",
+    "name": "Chemical Engineering",
+    "description": "Engineering dealing with the industrial application of chemistry and development of new chemical technology."
+  },
+  {
+    "category": "Chemistry",
+    "categorySlug": "Chemistry",
+    "roll": "38-50",
+    "name": "Electrochemistry",
+    "description": "Deals with the relation of electricity to chemical changes and with the interconversion of chemical and electrical energy."
+  },
+  {
+    "category": "Chemistry",
+    "categorySlug": "Chemistry",
+    "roll": "51-64",
+    "name": "Organic Chemistry",
+    "description": "Deals with only chemical elements found occuring in natural substances."
+  },
+  {
+    "category": "Chemistry",
+    "categorySlug": "Chemistry",
+    "roll": "65-77",
+    "name": "Polymers",
+    "description": "The study of advanced chemical compounds to form other new materials."
+  },
+  {
+    "category": "Chemistry",
+    "categorySlug": "Chemistry",
+    "roll": "78-88",
+    "name": "Sonochemistry",
+    "description": "The effects of sonic energy on chemicals."
+  },
+  {
+    "category": "Chemistry",
+    "categorySlug": "Chemistry",
+    "roll": "89-00",
+    "name": "Spectroscopy",
+    "description": "Physics that deal with the theory and interpretation of interactions between matter and radiation."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "01-04",
+    "name": "Ballistics",
+    "description": "Ballistics is the study of guns, knowing what bullet goes with what gun, where a shot could have come from, etc., etc. This is the kind of stuff you see TV detectives doing when they find powder burns and bullet holes. PC gets a +1CS to Reason when trying to figure out these kinds of things."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "05-07",
+    "name": "Camoflage",
+    "description": "Allows a character +2CS to trying to camouflage equiptment, objects, and self. Requires a yellow Intuition FEAT for a person to find it."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "08-10",
+    "name": "Counterfeit Recognition",
+    "description": "+1CS to Intuition for identifying false signatures, money, art, etc. A failed roll means that the character believes its genuine."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "11-12",
+    "name": "Clue Analysis",
+    "description": "+1CS to Intuition/Reason on gathering information on clues."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "13-16",
+    "name": "Criminology",
+    "description": "The hero with this Talent has an understanding of the criminal mind and behavior, either from studies or first-hand observation. The character with this Talent gains a +1CS on all Reason and Intuition FEATs involving criminal practices."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "17-22",
+    "name": "Demolitions",
+    "description": "The PC gets +1CS to Reason when figuring out the best applications for explosives, or the creation of home made explosives. Allows a good chance to blow the vault door off the wall without collapsing the back half of the building."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "23-29",
+    "name": "Detective/Espionage",
+    "description": "Gains Clue Analysis, Counterfeit recognition, identification System, Law, and Police Procedure. This character is trained to notice small clues to a crime, and gains +1CS to find them, and also gains 1 contact in either Crme, Law enforcement, or Law."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "30-32",
+    "name": "Disguise",
+    "description": "Disguise gives a +1CS to two stats...Intuition and Reason. When a PC gets in disguise, two situations could come up. One is where the disguise only has to pass at a glance. In this situation, anyone having cause to notice rolls an opposed FEAT between his Intuition and the character's Reason (+1CS). The other situation is where the character must adopt mannerisms to go with the disguise (disguising voice, affecting a limp, etc.). The person the character is trying to fool must make an opposed FEAT against the character's Intuition (+1CS) using either Reason or Intuition (whichever is higher). In either case, if the FEAT is failed, nothing is noticed. Green thru Red would signify anything from knowing something is wrong to recognizing the character."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "32-37",
+    "name": "Forensics",
+    "description": ""
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "38-42",
+    "name": "Forgery",
+    "description": "Enables a character to create excellent copies of a signature or work of art."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "43-44",
+    "name": "Intimidation",
+    "description": "A character with this talent knows how to inspire fear in an opponent either through the use of threats, brute strength, or imposing size and gains a +1CS to Intimidation."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "45-47",
+    "name": "Interrogation",
+    "description": "The character is well versed in extracting information from a subject gaining a +1CS to Interrogation."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "48-55",
+    "name": "Law",
+    "description": "A character with law gains +1CS to all FEATs involving law"
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "56-64",
+    "name": "Law Enforcement",
+    "description": "Includes Gun and Law talents and the Police Procedure talent. If a characer is still with the Law Enforcement agency, he may carry a gun and make arrests legally"
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "65-70",
+    "name": "Military",
+    "description": "Includes Camouflage, Cartography, Demolition, Electronic Countermeasures, guns, and Heavy Weapons and grants a +1CS to all military matters including army weapons. Gain one co ntact in the military."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "71-77",
+    "name": "Negotiations",
+    "description": "+1CS to popularity in hostile situations."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "78-83",
+    "name": "Pollice Procedure",
+    "description": "Enables a character to avoid both police conflict and security. For example; such a character could apprehend felons and gain access to a crime scene without being arrested."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "84-88",
+    "name": "Pick Pocket",
+    "description": ""
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "89-92",
+    "name": "Security",
+    "description": "This talent has two benefits. First, the PC gets a +1CS to Reason to create or remove Security devices, provided the PC has the proper background or a high enough Reason to begin with. Second, the PC gets a +1CS to Intuition for noticing installed security devices."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "93-96",
+    "name": "Stealth",
+    "description": "Stealth is an Intuition based talent. It gives +1CS to intuiton and requires others to make an Intuition Feat at the intensity of the stealthy character's modified intuition in order to spot the character. Any movement requires additional Stealth FEAT's, or the watchers get another roll to detect the character. Detective/Espionage DOES give a bonus to spotting Stealthy characters."
+  },
+  {
+    "category": "Crime and Law",
+    "categorySlug": "Law",
+    "roll": "97-00",
+    "name": "Tracking",
+    "description": "This skill allows you to track others and to cover your own trail with any earthbound target and through any type of terrain. When doing the tracking +1CS for tracking people +1CS for each person over one that you are tracking."
+  },
+  {
+    "category": "Cognitive Sciences & Humanities",
+    "categorySlug": "Cog",
+    "roll": "01-13",
+    "name": "Anthropology",
+    "description": "Reason FEAT bonuses only if a specific culture is taken. However, an overview is known on the subject. More than one branch can be selected, each taking a talent slot."
+  },
+  {
+    "category": "Cognitive Sciences & Humanities",
+    "categorySlug": "Cog",
+    "roll": "14-21",
+    "name": "Archaeology",
+    "description": "Reason FEAT bonuses only if a specific culture is taken. However, an overview is known on the subject. More than one branch can be selected, each taking a talent slot."
+  },
+  {
+    "category": "Cognitive Sciences & Humanities",
+    "categorySlug": "Cog",
+    "roll": "22-29",
+    "name": "Cartography",
+    "description": "Enables a character ot draw and interpret maps and grants +1CS to all attempts."
+  },
+  {
+    "category": "Cognitive Sciences & Humanities",
+    "categorySlug": "Cog",
+    "roll": "30-39",
+    "name": "History",
+    "description": "This character can pick a specific branch of history to be an expert in (World War II, South African, Mayan, Neolithic) and gets a +1CS to Reason FEATs involving the branch. More than one branch can be selected, each taking a slot."
+  },
+  {
+    "category": "Cognitive Sciences & Humanities",
+    "categorySlug": "Cog",
+    "roll": "40-52",
+    "name": "Philology (linguistics)",
+    "description": "The study of human speech including the units, structure, modification of language. (Character gets to pick one language other than English to be fluent in.)"
+  },
+  {
+    "category": "Cognitive Sciences & Humanities",
+    "categorySlug": "Cog",
+    "roll": "53-66",
+    "name": "Music Cognition",
+    "description": "The study of musical development throughout human history. This does not automatically grant the character with the performer talent."
+  },
+  {
+    "category": "Cognitive Sciences & Humanities",
+    "categorySlug": "Cog",
+    "roll": "67-80",
+    "name": "Philosophy",
+    "description": ""
+  },
+  {
+    "category": "Cognitive Sciences & Humanities",
+    "categorySlug": "Cog",
+    "roll": "81-00",
+    "name": "Psychology",
+    "description": "+1CS in all FEATs involving the mind. A popular talent for those with mental powers. These character gain a +1CS on FEATs involving Mental Contact, Domination, Hypnosis, Emotion Control, and Mental Probe powers."
+  },
+  {
+    "category": "Computer Science",
+    "categorySlug": "Computer",
+    "roll": "01-13",
+    "name": "Architecture",
+    "description": "+1CS in architecture FEATs."
+  },
+  {
+    "category": "Computer Science",
+    "categorySlug": "Computer",
+    "roll": "14-29",
+    "name": "Artificial Intelligence",
+    "description": "The study and research of man made thinking systems."
+  },
+  {
+    "category": "Computer Science",
+    "categorySlug": "Computer",
+    "roll": "30-45",
+    "name": "Computer Engineering",
+    "description": "The design and construction of computer hardware."
+  },
+  {
+    "category": "Computer Science",
+    "categorySlug": "Computer",
+    "roll": "46-51",
+    "name": "Electronic Counter Measures",
+    "description": "Enables a character to understand, operate, and detect the use of bugs, jammers, and decoders. +1CS to Reason in using them, Intuition for finding them."
+  },
+  {
+    "category": "Computer Science",
+    "categorySlug": "Computer",
+    "roll": "52-58",
+    "name": "Graphics",
+    "description": "Web designer, advertising, printing product design and familiarity with the printing industry and various paper products and design tools."
+  },
+  {
+    "category": "Computer Science",
+    "categorySlug": "Computer",
+    "roll": "59-75",
+    "name": "Security and Encryption",
+    "description": ""
+  },
+  {
+    "category": "Computer Science",
+    "categorySlug": "Computer",
+    "roll": "76-89",
+    "name": "Programming",
+    "description": "The creation and development of computer software."
+  },
+  {
+    "category": "Computer Science",
+    "categorySlug": "Computer",
+    "roll": "90-00",
+    "name": "Virtual Reality",
+    "description": "An indepth knowledge of human's interaction with computer systems."
+  },
+  {
+    "category": "Earth Sciences",
+    "categorySlug": "Earth",
+    "roll": "01-11",
+    "name": "Agriculture",
+    "description": "Deals with field crop production and soil management Also, a combination of the producing operations of a farm, the manufacture and distribution of supplies, and the processing distribution and storage of such supplies. The development and repair of farm equipment, irrigation systems and landscape planning. Can also include forestry, the science of developing, caring for and cultivating forests and/or timberlands."
+  },
+  {
+    "category": "Earth Sciences",
+    "categorySlug": "Earth",
+    "roll": "12-25",
+    "name": "Ecology",
+    "description": "Ecology is the study of living things and how they interact in an ecological system. A PC with ecology will gain a +1CS to Reason to checks involving learning or reasoning out things about a natural balance, like what is throwing it off (\"See this, the bugs are going wild on these plants...somewhere there must be a tremendous nest underground...somewhere...\"). Will be an expert on most ecological situations, and may guess at alien ones also."
+  },
+  {
+    "category": "Earth Sciences",
+    "categorySlug": "Earth",
+    "roll": "12-25",
+    "name": "Geography",
+    "description": "Mapping the earth and its surface."
+  },
+  {
+    "category": "Earth Sciences",
+    "categorySlug": "Earth",
+    "roll": "26-38",
+    "name": "Geology",
+    "description": "Deals with the history of the earth and its life esp. in rocks."
+  },
+  {
+    "category": "Earth Sciences",
+    "categorySlug": "Earth",
+    "roll": "39-50",
+    "name": "Hydrology",
+    "description": "Deals with the properties, distribution, and circulation of water on the surface of the land, in the soil and rocks, and in the atmosphere."
+  },
+  {
+    "category": "Earth Sciences",
+    "categorySlug": "Earth",
+    "roll": "51-64",
+    "name": "Meteorology",
+    "description": "Study of weather systems."
+  },
+  {
+    "category": "Earth Sciences",
+    "categorySlug": "Earth",
+    "roll": "65-75",
+    "name": "Metallurgy",
+    "description": "The study of metal and its practical uses."
+  },
+  {
+    "category": "Earth Sciences",
+    "categorySlug": "Earth",
+    "roll": "76-90",
+    "name": "Oceanography",
+    "description": "Study of the oceans movements and effects on land and atmosphere."
+  },
+  {
+    "category": "Earth Sciences",
+    "categorySlug": "Earth",
+    "roll": "91-00",
+    "name": "Seismology",
+    "description": "The study of earth movement. Includes glaciology and volcanology."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "01-06",
+    "name": "Aviation and Aeronautics Engineering",
+    "description": "This is not piloting. It is the understanding and development of flight principles and aircraft design. There are people who know how to build planes but not fly them. Characters with this talent get the benefit of having their projects cost -1CS less in resource rank to build."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "07-11",
+    "name": "Astronautic Engineering",
+    "description": "This allows the character to design, build and modify out of atmosphere space craft. Characters with this talent get the benefit of having their projects cost -1CS less in resource ran k to build."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "12-16",
+    "name": "Automotive Engineering",
+    "description": ""
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "17-19",
+    "name": "Battlesuit Design",
+    "description": "This skill allows the character +1CS to design and build battlesuits, harnesses, etc."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "20-21",
+    "name": "Civil Engineering",
+    "description": "Deals with roads, city works, water systems, overpasses, etc."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "22-25",
+    "name": "Cybernetics/Bionics",
+    "description": "Study of living systems with the intention of applying their principles to the design of engineering systems. Drawing on interdisciplinary research in the mechanical and life sciences, bionics has been used in audiovisual equipment based on human ear function, to design air and naval craft patterned after biological structure of birds and fish, and to incorporate principles of the human neurological system in data-processing systems. Another application has been the development of artificial limbs controlled by recognition of the electrical patterns in muscle tissue and direct electronic stimulation of the visual cortex via an implant and camera system. This talent allows the character the ability to design advanced cybernetic creations. With medicine/surgery, the character can actually perform surgery, allowing the construction of replacement organs, limbs, etc."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "26-28",
+    "name": "Demolitions",
+    "description": "Precise knowledge of how to build, use and diffuse explosive devices."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "29-31",
+    "name": "Gadgetry",
+    "description": "Can build gadgetry, and recieve a +1CS to all FEATs involving them."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "32-35",
+    "name": "Identify Gadgets",
+    "description": "Enables a character to Identify and use Gadgets but not build them. Alien technology results in -1CS to -5CS"
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "35-38",
+    "name": "Electrical Engineering",
+    "description": ""
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "39-44",
+    "name": "Locksmith",
+    "description": ""
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "45-50",
+    "name": "Marine Engineering",
+    "description": "Includes the building of ships, submarines and underwater constructs."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "51-57",
+    "name": "Mechanical Engineering",
+    "description": "The character with talent is capable of building complex machines for an assortment of tasks."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "58-63",
+    "name": "Military Engineering",
+    "description": ""
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "64-69",
+    "name": "Nuclear Engineering",
+    "description": "Deals with the construction and development of nuclear powered, manipulating and control devices."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "70-76",
+    "name": "Repair/Tinkering",
+    "description": "Modification of existing machines or equipment."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "77-82",
+    "name": "Robotics",
+    "description": "This skill allows a +1CS in dealing with Robotic construction, design, matianence, and theory. When used with the computer skill, the character can design AI constructions."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "83-88",
+    "name": "Structural Engineering",
+    "description": "This allows the character to design, build and modify structural complexes (buildings, bases, tunnels, mines, etc.) Building bases or hideouts are -1CS to effective cost of course."
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "89-95",
+    "name": "Weapons Engineering",
+    "description": "Precise knowledge of how to build, use and modify guns, missiles and artillery. This talent does not include explosive devices. (see Demolitions.)"
+  },
+  {
+    "category": "Engineering",
+    "categorySlug": "Engineering",
+    "roll": "96-00",
+    "name": "Weapons Tinkering",
+    "description": "Modification of existing weapons."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "01-03",
+    "name": "Aerial Combat",
+    "description": "This skill allows a character +1CS to fighting when engages mid-air. The character has some knowledge of aerial tactics, and possesses keen ability to use such."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "04-07",
+    "name": "Underwater Combat",
+    "description": "The Skill allows a character to operate in combat conditions without penality underwater.. Furthermore the character recieves a +1CS to all Fighting and Agility FEAT's whilst submerged"
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "08-11",
+    "name": "Climbing",
+    "description": "Allows you to climb trees, telephones , buildings cliffs, etc. +2CS to Agility when trying this. Failure can be painful."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "12-15",
+    "name": "Dodging",
+    "description": "+1CS to dodging"
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "16-19",
+    "name": "Gymnastics",
+    "description": "Enables a character to perform flips, rolls, etc, and also allows a character to juggle. This skill will readily impress a crowd and increase the popularity of the hero +2 every time he works it into a battle where popularity is available."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "20-23",
+    "name": "Martial Arts A",
+    "description": "This form of martial arts concentrates on using an opponent's strength against him, and is typical of oriental- American forms such as judo and karate. The practitioner of this type of martial arts can Stun or Slam an opponent regardless of their comparative Strengths and Endurances."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "24-27",
+    "name": "Martial Arts B",
+    "description": "This form of martial arts is keyed on offense and inflicting damage in short, quick bursts, and includes such disciplines as boxing. The practitioner of this form of martial arts gains a +1CS to Fighting ability when engaged in unarmed combat."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "28-31",
+    "name": "Martial Arts C",
+    "description": "This form of martial arts concentrates on holds and escapes. The practitioner of this form gains a +1CS to his Strength for Grappling attacks (including damage), a +1CS to Strength for Escaping and a +1CS to Agility for purposes of Dodging."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "31-34",
+    "name": "Martial Arts D",
+    "description": "This meditative form of martial arts searches out the weak spots of the opponent's defenses and strikes against them. The practitioner of this form of attack may ignore the effects of Body Armor for determining Stun and Slam results. The attack by the character with this Talent does not have to inflict damage to force a check for possible Stun and Slam. The disadvantage is that the target of this attack must be studied for two rounds before the effects may be brought into play. The character with this Talent does not have to attack the character, only watch him in battle for two rounds previous to attacking."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "35-38",
+    "name": "Martial Arts E",
+    "description": "This form of martial arts encourages quick striking to catch the opponent off-guard. Heroes with this form of Martial Arts are at +1CS to initiative rolls in unarmed combat."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "39-42",
+    "name": "Martial Arts F",
+    "description": "This martial arts focuses on circular movements and deflecting. The character receives +1CS to strength for blocking and checks vs. Slams and Stuns. This form has no offensive applications, but instead keys in on defense by outlasting the opponent."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "43-45",
+    "name": "Martial Arts G",
+    "description": "This fighting form relies more on intuition than intelligence. The practitioner of this form can wait until all actions have been declared before he or she must declare an action. This is limited to melee fighting situations only, and cannot be used to state anything but a fighting oriented action."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "46-49",
+    "name": "Martial Arts H",
+    "description": "The martial artist has trained to have complete control and awareness of his body. He can use this martial art to apply a +2CS to Endurance for the purpose of healing lost health. Alternatively, he can apply a +2CS to endurance for the purposes of holding his/her breath underwater or under gas attacks, provided the martial artist does not move or attack while using this talent."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "50-53",
+    "name": "Martial Arts I",
+    "description": "This martial arts is very unique. It allows a teacher (sensei) to gain karma from the actions of his/her pupils. A character with this martial art will gain 10% of karma gained from the student (s) and can channel their energies to allow a karma pool between himself and his student (s) even when the master is not nearby his student (s)."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "54-57",
+    "name": "Martial Arts J",
+    "description": "This martial art involves using your surroundings to become an extension of yourself. The martial artist is totally aware of all furniture, props, natural objects etc in the surrounding area For example, slamming a refridgerator door on your opponent or pulling the carpet out from under their feet. The martial artist never needs to make a successful grab for any loose (not possessed by anyone) objects in the area while fighting despite being stressed. As well, any attacker must make a successful intuition feat. Failure means the attacker has struck a nearby item of the Martial Artist's choosing and may receive damage as per the rules on breaking things."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "58-61",
+    "name": "Martial Arts K",
+    "description": "This martial art focuses on understanding the pressure points and weak spots of the human body. Characters with this talent may opt to strike a target during slugfest combat with a \"nerve pinch\". A yellow fighting feat roll is needed (the equivalent of a slugfest \"bullseye\" result). Instead of doing normal damage, the target must make a successful Endurance Feat vs Remarkable Intensity or fall unconscious for 1-10 rounds. If the target is Blindsided, treat the intensity as Incredible. Note: this martial art can only be used against human targets."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "62-65",
+    "name": "Martial Arts L",
+    "description": "This Martial Art focuses on sumo wrestling and absorbing/redirecting force. The so called \"roll with the punches\", this martial art allows a character a +1CS to endurance for the purpose of checking for slam and stun results from slugfest combat only. This martial art can not be applied if the hero is blindsided."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "66-69",
+    "name": "Martial Arts M",
+    "description": "This Talent focuses on fighting, for the purpose of evading. Allow a +1CS column shift to fighting for determining the effects of evasion only."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "70-73",
+    "name": "Martial Arts N",
+    "description": "This martial Art involves putting all of your energy focused on to a single blow. An example would be a haymaker, or a long flying kick to finish an already shaky opponent. The good news is the effects of this attack are amplified. Apply a +1CS to damage rolled under the slugfest column. When the target is checking for effects the target must shift his endurance down -1CS for checking slams and stuns. The Bad news is this attack requires a significant amount of timing and energy. The target is +1CS for evading this attack. As well, the martial artist must check for a red fighting feat. Failure indicates the attacker may not take any actions in the next round. As well, even if this feat is successful the attacker always loses initiative in the next combat round."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "74-77",
+    "name": "Martial Arts O",
+    "description": "The martial artist has trained in the martial arts through it's original form, studying the movements of animals. The martial artist may apply a +1CS to the applicable ability (fighting for evading, strength for blocking etc.) for performing any offensive or defensive actions when fighting wild animals. Note: this martial art requires a talent feat. Automatic - Any animal indigineous to the area the martial artist has trained. Green -- Any earthly animal, regardless of a martial artist's familiarity. Yellow -- An earthly animal but one that operates beyond the normal realm of similar animals Red- Alien/Other-dimensional Animals"
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "78-81",
+    "name": "Martial Arts P",
+    "description": "This martial art concentrates on working with teammates in a combined attack, where the stronger of two characters hurls/throws/tosses the other, either as a projectile to strike an opponent or to pass over, land upon or behind a specific target. The martial art allows the character to utilize the higher of the two individuals agility to determine success, regardless of who is projector or projected. Examples would be the X-Men's \"Fastball Special\" and The TEAM's \"Maneuver Number 7\" (Young Justice)."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "82-85",
+    "name": "Martial Arts Q",
+    "description": "The martial artist is trained as receving damage, such as breaking a wooden chair on his/her back without flinching. The martial artist must be standing still and requires a psyche feat. If these conditions are met, the martial artist will receive excellent body armour against blunt and slugfest attacks."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "86-89",
+    "name": "Martial Arts R",
+    "description": "The martial artist is trained to break objects with his body such as wood, bricks, blocks of ice, etc. Apply a +1CS to damage for the purpose of breaking inanimate objects only. This martial art can be combined with Martial arts N to allow a +2CS to damage for breaking things but all of the limitations of martial arts N still apply."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "90-92",
+    "name": "Quick-Striking",
+    "description": "Characters with this talent gain +1CS to Fighting FEATs involving trying for multiple attack rolls. Also gains a +1 on initiative rolls."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "93-94",
+    "name": "Wrestling",
+    "description": "The hero with this Talent is proficient in applying holds. It includes familiar types of wrestling as well as the sumo forms of the art. The hero with this Talent gains a +2CS when making Grappling attacks, but gains no benefit in damage. A hero with Martial Arts B and this Talent gains a +3CS to hit in a Grappling attack, and a +1CS for damage."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "95-96",
+    "name": "Thrown Objects",
+    "description": "The hero with this Talent gains a +1CS with all Throwing attacks, and +1CS on Catching. This applies to both thrown weapons and normal items. If the hero has the Thrown Weapons Talent as well, the modification is +2CS when using thrown weapons."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "97-98",
+    "name": "Acrobatics",
+    "description": "The hero with this Talent is very limber and as such gains advantages when under attack. The hero has a +1CS when dodging, evading, and escaping."
+  },
+  {
+    "category": "Fighting Skills",
+    "categorySlug": "Fighting",
+    "roll": "99-00",
+    "name": "Tumbling",
+    "description": "The hero with this Talent knows how to fall and land without undue injury. Individuals with this Talent may make an Agility FEAT to land feet-first after any fall that does not inflict damage."
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "01-05",
+    "name": "Acupuncture",
+    "description": ""
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "06-10",
+    "name": "Cardiology",
+    "description": ""
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "11-15",
+    "name": "Chiropractic",
+    "description": ""
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "16-20",
+    "name": "Dentistry",
+    "description": ""
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "21-25",
+    "name": "Emergency Medicine",
+    "description": "This character is capable of working in a trauma unit, emergency room or any other kind of immediate care."
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "26-33",
+    "name": "First Aid",
+    "description": "This Talent grants the character the ability to immediately halt Endurance rank loss, the and the recovery of one rank immediately. In addition, the hero with this Talent can stabilize a dying character at Shift-0 Health up to 5 rounds after that character reaches that level."
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "34-39",
+    "name": "Geriatrics",
+    "description": "Medical care for older people."
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "40-44",
+    "name": "Obstetrics and Gynecology.",
+    "description": "Women and babies and related problems."
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "45-49",
+    "name": "Oncology",
+    "description": "The study of cancer."
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "50-54",
+    "name": "Pathology",
+    "description": "The study of diseases and their nature."
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "55-60",
+    "name": "Pediatrics",
+    "description": "Children"
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "61-65",
+    "name": "Pharmacology",
+    "description": "THe study of drugs"
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "66-70",
+    "name": "Physical Therapy",
+    "description": ""
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "71-75",
+    "name": "Plastic Surgery",
+    "description": ""
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "76-81",
+    "name": "Psychiatry",
+    "description": "Deals with mental, emotional and behavioral disorders. The hero with this Talent has a background in studies of the mind, and as such gains a + 1CS on all FEATs involving the mind."
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "82-87",
+    "name": "Radiology",
+    "description": "The use of radiation in the diagnosis and treatment of disease."
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "88-93",
+    "name": "Sports Medicine",
+    "description": ""
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "94-98",
+    "name": "Surgery",
+    "description": "Allows the charactre to repair extensive physical damage. Surgery skill gives you the ability to perform surgery and a +1CS to Reason FEATs while performing them. If the surgery is performed anywhere but a hospital type setting, the surgery is done at a -2CS. Extensive surgery on an Alien or other abnormal physiology there is also a -2CS. Surgery is very dangerous to the patient. If the Surgery is succesful the patient recieves twice his endurance points in health. If the surgery is unsuccessful the patient Loses three times his Endurance points. If the character reaches Shift-0 he may die. Completing a succesful surgery should be worth a lot of Karma."
+  },
+  {
+    "category": "Medicine",
+    "categorySlug": "Medicine",
+    "roll": "99-00",
+    "name": "Veterinary",
+    "description": "Taking care of animals medical needs."
+  },
+  {
+    "category": "Mystic and Mental Skills",
+    "categorySlug": "Mystic",
+    "roll": "01-08",
+    "name": "Bibliophile",
+    "description": "The character has an extensive knowledge of magical books, scrolls, or other primarily informational items, and the lore concerning them. He has a +2CS when using or researching these."
+  },
+  {
+    "category": "Mystic and Mental Skills",
+    "categorySlug": "Mystic",
+    "roll": "09-16",
+    "name": "Demonologist",
+    "description": "The character has studied accounts of demons in the Marvel Universe and he knows how dangerous and hostile they are. The character receives a +1CS in any situation involving demons, including research, communication, identification and combat."
+  },
+  {
+    "category": "Mystic and Mental Skills",
+    "categorySlug": "Mystic",
+    "roll": "17-24",
+    "name": "Mesmerism and Hypnosis",
+    "description": "This talent is a primitive form of Mind Control at the Power rank number equal to the Reason of the character with this Talent. Information can be gained as per a Mental Probe, and posthypnotic suggestions may be implanted within the victim's mind. Any attempt to force an individual to do something that he would not normally do, or divulge information that he would not normally reveal, will cause the hypnotism to break. A hypnotic command fades in 1-10 hours after it is given."
+  },
+  {
+    "category": "Mystic and Mental Skills",
+    "categorySlug": "Mystic",
+    "roll": "25-32",
+    "name": "Mystic Background",
+    "description": "This \"Talent\" shows that the character has some background with magical forces. A character with this Talent may have Magical Powers, with the approval of the Judge."
+  },
+  {
+    "category": "Mystic and Mental Skills",
+    "categorySlug": "Mystic",
+    "roll": "33-40",
+    "name": "Occult Lore",
+    "description": "The character has made extensive studies into the area of occult happenings, including: unexplained events and mysteries of the world, hauntings, and other manifestations of the spirit world. He has a +2CS when researching or dealing with occult events."
+  },
+  {
+    "category": "Mystic and Mental Skills",
+    "categorySlug": "Mystic",
+    "roll": "41-48",
+    "name": "Resist Domination",
+    "description": "This permits the character to resist mental attacks as if the character had a mental power of Psyche +1CS."
+  },
+  {
+    "category": "Mystic and Mental Skills",
+    "categorySlug": "Mystic",
+    "roll": "",
+    "name": "Ritual Magics",
+    "description": "Reason FEAT to perform magical ceromonies. To do this you need knowledge of the ceremony (usually from a book), equiptment, and time. Time is 1d20 times 2 = rounds of spellcasting needed."
+  },
+  {
+    "category": "Mystic and Mental Skills",
+    "categorySlug": "Mystic",
+    "roll": "49-56",
+    "name": "Runesmith",
+    "description": "The character is a transcriber and translator of runes, especially ancient, magical runes. The character has a +2CS whenever studying, deciphering, or inscribing runes."
+  },
+  {
+    "category": "Mystic and Mental Skills",
+    "categorySlug": "Mystic",
+    "roll": "57-65",
+    "name": "Scholar of Antiquities",
+    "description": "The character has an extensive knowledge of antiques, especially ancient magical artifacts and lore concerning them. He gains a +2CS when dealing with them"
+  },
+  {
+    "category": "Mystic and Mental Skills",
+    "categorySlug": "Mystic",
+    "roll": "66-74",
+    "name": "Sleight of Hand",
+    "description": "The character with this Talent may palm small items, making them appear or disappear with Agility +1CS ability."
+  },
+  {
+    "category": "Mystic and Mental Skills",
+    "categorySlug": "Mystic",
+    "roll": "75-83",
+    "name": "Theogony",
+    "description": "The character has a +2CS when researching information on the powerful extradimensional beings and gods of the Marvel"
+  },
+  {
+    "category": "Mystic and Mental Skills",
+    "categorySlug": "Mystic",
+    "roll": "84-92",
+    "name": "Trance",
+    "description": "The character may place himself into a trance. While in a trance the character slows his body functions to such a level that he may be assumed to be deceased. A character in a trance reduces needs for food and water to a minimal level, and may regain Endurance ranks at one rank per day."
+  },
+  {
+    "category": "Mystic and Mental Skills",
+    "categorySlug": "Mystic",
+    "roll": "93-00",
+    "name": "Zoologist of Magic",
+    "description": "Allows a +1CS when attempting to identify magical creatures and their powers."
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "01-05",
+    "name": "Accounting",
+    "description": ""
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "06-09",
+    "name": "Actor",
+    "description": "This gives the ability to be used to disguise a character. An actor recieves a +1CS to all disguise attempts and opponents recieve a -1CS to seeing through the disguise"
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "10-14",
+    "name": "Animal Training",
+    "description": "This character may teach animals simple tricks. If the character has animal communication, control, or empathy they recieve a +1CS"
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "15-19",
+    "name": "Artist",
+    "description": "The character with an artist background creates works of art, either for himself or for sale to others. This includes painting, sculpting, and writing."
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "20-25",
+    "name": "Business/Finance",
+    "description": "The hero is familiar with the world of business, corporate finance, and how money works. Initial resources are a minimum of Good, and the hero gains a +1CS for FEAT rolls dealing with money."
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "26-30",
+    "name": "Escape Artist",
+    "description": "+1CS to strength in trying to escape holds or bonds."
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "31-32",
+    "name": "Heir To A Fortune",
+    "description": "This is not a Talent, but a situation which brings the character into a lot of money. The minimum Resources of a character with this Talent is Remarkable"
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "33-36",
+    "name": "Instructor",
+    "description": "Allows the character to teach a particular ability, allowing students the learning bonus. The teacher is given the same bonus for instruction, and is profficent (+1CS) in a particular skill"
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "37-41",
+    "name": "Journalism",
+    "description": "Hero gains 2 additional contacts in the media"
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "42-46",
+    "name": "Leadership",
+    "description": "The Hero with this talent is a natural born leader. If this Ctd style=em haracter forms akarma pool with a team then that pool receives a 50 point bonus, provided that this character is recognized as the team leader. When the leader leaves, the 50 points go with him. The leader does not gain them, they simply leave the pool. Only one leader per team."
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "47-52",
+    "name": "Performer",
+    "description": "The character is someone who acts, sings, dances, mimes, or otherwise uses his Talents to entertain."
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "53-57",
+    "name": "Persuasion",
+    "description": "This talent provides the ability to convince someone to believe something or perform some action. Like Interrogation, a persuasion attempt normally requires 15 minutes."
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "58-63",
+    "name": "Pick Pocketing",
+    "description": "Allows the character the ability to \"borrow\" items from another person without their knowledge. Can grant as much as +2CS to Agility if item is in an accessible place (outside pocket of an overcoat.)"
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "64-69",
+    "name": "Politics",
+    "description": "Being involved with politics in the public eye, you are either realy liked or really hated. If the charcter is already freindly you gain a +1CS in getting help, but if the character is unfriendly or hostile you recieve an additional -1CS. You gain 2 contacts, Usually your chief supporter"
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "70-76",
+    "name": "Seduction",
+    "description": "The character receives +1 to Persuasion attempts with members of the opposite sex"
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "77-82",
+    "name": "Sewing and Tailoring",
+    "description": ""
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "83-89",
+    "name": "Streetsmart",
+    "description": "Character know the streets and how to survive theere. Character also gains 2 contacts at the street level"
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "90-93",
+    "name": "Student",
+    "description": "Similair to Heir to fortune, this talent may only be chosen at the start of play. The student character has no other initial talents, but may gain other talents at a discounted price.New talents cost 1000 karma points if learned from another player, 800 if learned from an outside source. Students may maintain Advancement totals for a Talent along with other forms of advancement funds."
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "94-96",
+    "name": "Thief",
+    "description": "Allows the ability to picklocks, access security, and safecracking"
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "97-99",
+    "name": "Trivia",
+    "description": "Pick a subject to be a know-it-all about."
+  },
+  {
+    "category": "Other",
+    "categorySlug": "Other",
+    "roll": "00",
+    "name": "Writer",
+    "description": "Enables a character to produce novel, screenplays, comic books, poetry, coloring books. Takes at least a week to complete."
+  },
+  {
+    "category": "Physics",
+    "categorySlug": "Physics",
+    "roll": "01-15",
+    "name": "Acoustics",
+    "description": "Deals with the study of noise control and Sonoluminescence, using sound to produce light in liquids."
+  },
+  {
+    "category": "Physics",
+    "categorySlug": "Physics",
+    "roll": "16-32",
+    "name": "Atomic Physics",
+    "description": "The study of solely atomic physics. Includes nuclear physics."
+  },
+  {
+    "category": "Physics",
+    "categorySlug": "Physics",
+    "roll": "33-48",
+    "name": "Cryogenics",
+    "description": "Deals with the production and effects of very low temperatures."
+  },
+  {
+    "category": "Physics",
+    "categorySlug": "Physics",
+    "roll": "49-66",
+    "name": "Energy and Particle Physics",
+    "description": "The study of the electromagnetic spectrum of energy and research into new power sources."
+  },
+  {
+    "category": "Physics",
+    "categorySlug": "Physics",
+    "roll": "67-83",
+    "name": "Mathematics",
+    "description": "The character with this talent is a math whiz, unbelievably good with numbers and as such gets a plus +1CS to all problems that can be solved mathematically."
+  },
+  {
+    "category": "Physics",
+    "categorySlug": "Physics",
+    "roll": "84-00",
+    "name": "Quantum Physics",
+    "description": "Research and development into teleportation, worm holes, warp theory and other MARVELous ideas. The character can even start off by creating a new specialty field. Counts as two talents."
+  },
+  {
+    "category": "Piloting Skills",
+    "categorySlug": "Pilot",
+    "roll": "01-15",
+    "name": "Airplane Pilot",
+    "description": "Includes commercial jets, small planes and fighter jets."
+  },
+  {
+    "category": "Piloting Skills",
+    "categorySlug": "Pilot",
+    "roll": "16-27",
+    "name": "Automobile Specialist",
+    "description": "+1CS to driving and controlling cars, trains, tanks, hovercrafts, etc."
+  },
+  {
+    "category": "Piloting Skills",
+    "categorySlug": "Pilot",
+    "roll": "28-38",
+    "name": "Boat Pilot",
+    "description": "+1CS to all FEATs involving sailboats, aircraft carriers, submarines, tugboats, and so on."
+  },
+  {
+    "category": "Piloting Skills",
+    "categorySlug": "Pilot",
+    "roll": "39-50",
+    "name": "Helicopter",
+    "description": ""
+  },
+  {
+    "category": "Piloting Skills",
+    "categorySlug": "Pilot",
+    "roll": "51-63",
+    "name": "Military Vehicle Specialist",
+    "description": "Includes tanks, jeeps and other off-road warcraft."
+  },
+  {
+    "category": "Piloting Skills",
+    "categorySlug": "Pilot",
+    "roll": "64-77",
+    "name": "Motorcycle",
+    "description": ""
+  },
+  {
+    "category": "Piloting Skills",
+    "categorySlug": "Pilot",
+    "roll": "78-89",
+    "name": "Spacecraft",
+    "description": "Includes space shuttles and out of atmosphere ships."
+  },
+  {
+    "category": "Piloting Skills",
+    "categorySlug": "Pilot",
+    "roll": "90-00",
+    "name": "Submersible Vehicle",
+    "description": "Includes submarines, diving bells and other underwater vehicles."
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "01-06",
+    "name": "Ancient Weapons",
+    "description": "This skill gives the player the ability to use weaponry from a specific period and setting previous to the advent of gunpowder. Further, the Hero must pick the style and period of said weaponry, wheter it be Ancient egypt or Latter Rome."
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "07-12",
+    "name": "Battlesuit operation",
+    "description": "The Hero gains the ability to use a battlesuit without penality. This ability, while not conferring a +CS, eliminates the -CS for using unfamiliar technology, new weapons systems, or new versions of said suit."
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "13-20",
+    "name": "Blunt Weapons",
+    "description": "+1CS with Clubs, bats, etc."
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "21-27",
+    "name": "Bows",
+    "description": "With this talent gain a +1CS, and may fire and reload in a single round. They may fire multiple arrows on a successful Agility FEAT. Without this talent -1CS to Agility to hit when using bows"
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "28-34",
+    "name": "Energy Weapons",
+    "description": "The Hero gains a +1CS to using energy weapons, such as lasers, electrostun rifles, or plasma blasters, save for heavy weapons such as Laser Cannons and Vehicle Weapons."
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "35-42",
+    "name": "Guns",
+    "description": "+1CS to all hand guns and Rifles."
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "43-49",
+    "name": "Marksmen",
+    "description": "+1CS to hit with any distance weapon that requires line of sight to hit, and marksman takes no penalty for range."
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "50-56",
+    "name": "Oriental Weapons",
+    "description": "This grants the character a +1CS to fighting or agility when using the following; Shurikens, crossbows, sais, and oriental swords and daggers."
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "57-63",
+    "name": "Heavy Weapons",
+    "description": "Heavy Weapons allows the character +1CS for the operation of most heavy weapons, including vehicular mounted weapons and tripod mounted weapons."
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "64-70",
+    "name": "Fencing",
+    "description": "The Fencing skill allows the hero +1CS for the use of fencing, and also allows for the skills of parrying, disarming, and quickstrikes with a successful Yellow Agility FEAT."
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "71-76",
+    "name": "Paired Weapons",
+    "description": ""
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "77-83",
+    "name": "Sharp Weapons",
+    "description": "+1CS to hit with swords, daggers and spears (unless thrown). Does not include Claws and other natural extensions"
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "84-90",
+    "name": "Thrown Weapons",
+    "description": "+1CS to Agility for Spears, disks, shurikens, snowballs, etc."
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "91-96",
+    "name": "Weapons Master",
+    "description": "Character gains a +1CS to hit with any weapon that requires a Fighting FEAT to hit."
+  },
+  {
+    "category": "Weapons Skills",
+    "categorySlug": "Weapons",
+    "roll": "97-00",
+    "name": "Weapons Specialist",
+    "description": "Character gains +2CS with a single weapon of choice. Character also recieves a +1 to initiative when using that weapon."
+  }
+]
