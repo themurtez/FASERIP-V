@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:all": "run-p dev server",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -12,10 +13,15 @@
     "lint": "run-s \"lint:*\"",
     "lint:oxlint": "oxlint . --fix",
     "lint:eslint": "eslint . --fix --cache",
-    "format": "prettier --write --experimental-cli src/"
+    "format": "prettier --write --experimental-cli src/",
+    "server": "node --env-file=.env server/index.js",
+    "db:migrate": "node --env-file=.env server/migrate.js"
   },
   "dependencies": {
     "@primevue/themes": "4.5.4",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "pg": "^8.22.0",
     "pinia": "^3.0.4",
     "primeicons": "7.0.0",
     "primevue": "4.5.5",

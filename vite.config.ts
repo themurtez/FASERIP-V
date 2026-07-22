@@ -17,5 +17,12 @@ export default defineConfig({
   },
   server: {
     port: 5175,
+    proxy: {
+      // The character-save API (server/index.js, `npm run server`).
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
   },
 })

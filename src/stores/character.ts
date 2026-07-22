@@ -11,6 +11,7 @@ import { rankTier, shiftRank } from '@/data/ranks'
 import { powerSlotCost } from '@/data/powers'
 import { pickUniform } from '@/generators/dice'
 import * as gen from '@/generators/generateCharacter'
+import { saveCharacterToDb } from '@/services/characterDb'
 
 export const useCharacterStore = defineStore('character', () => {
   const character = ref<Character>(gen.createDefaultCharacter())
@@ -112,7 +113,7 @@ export const useCharacterStore = defineStore('character', () => {
   function generateResources() {
     const r = character.value.secondaryAbilities.resources
     if (r.locked) return
-    const rolled = gen.rollAbilityRank(currentColumn())
+    const rolled = gen.rollResourcesRank()
     const bonus = gen.racialSecondaryBonus(character.value.basicInfo.physicalForm.value, 'resources')
     const tier = bonus ? shiftRank(rolled.rank, bonus) : rankTier(rolled.rank)
     r.rank = tier.name
@@ -294,10 +295,18 @@ export const useCharacterStore = defineStore('character', () => {
     touch()
   }
 
+  function clearTalentSlot(index: number) {
+    const slot = character.value.talents.slots[index]
+    if (!slot || slot.locked) return
+    slot.name = ''
+    touch()
+  }
+
   function generateActiveTalentSlots() {
     const activeCount = character.value.talents.count.current
     character.value.talents.slots.forEach((slot, i) => {
       if (i < activeCount) generateTalentSlot(i)
+      else clearTalentSlot(i)
     })
   }
 
@@ -332,6 +341,9 @@ export const useCharacterStore = defineStore('character', () => {
     generateTalentCount()
     generateActiveTalentSlots()
     recordHistory()
+    if (autoSaveEnabled.value) {
+      saveCharacterToDb(character.value)
+    }
   }
 
   function newCharacter() {
@@ -401,9 +413,28 @@ export const useCharacterStore = defineStore('character', () => {
     character.value = JSON.parse(JSON.stringify(history.value[historyPointer.value]))
   }
 
+  // -- Auto-save to database -------------------------------------------------
+  //
+  // When enabled (Options menu), every generateAll() also POSTs the result
+  // to the Postgres-backed API (server/index.js). Off by default -- this
+  // writes to a real external database, so it shouldn't start doing that
+  // without the player opting in. The toggle persists across reloads.
+
+  const AUTO_SAVE_KEY = 'faserip.autoSaveEnabled'
+  const autoSaveEnabled = ref(localStorage.getItem(AUTO_SAVE_KEY) === 'true')
+
+  function toggleAutoSave() {
+    autoSaveEnabled.value = !autoSaveEnabled.value
+    try {
+      localStorage.setItem(AUTO_SAVE_KEY, String(autoSaveEnabled.value))
+    } catch {
+      // Storage full or unavailable -- the toggle still works for this session.
+    }
+  }
+
   // Boot with a fully generated character rather than a wall of blanks --
   // the store is created once per app load, so this runs exactly once.
-  // (generateAll() records its own history entry.)
+  // (generateAll() records its own history entry and auto-saves if enabled.)
   generateAll()
 
   // -- Import / export ------------------------------------------------------
@@ -474,5 +505,7 @@ export const useCharacterStore = defineStore('character', () => {
     canGoForward,
     goBack,
     goForward,
+    autoSaveEnabled,
+    toggleAutoSave,
   }
 })

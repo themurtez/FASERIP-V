@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
 import Toast from 'primevue/toast'
@@ -7,12 +7,14 @@ import { useToast } from 'primevue/usetoast'
 import { useCharacterStore } from '@/stores/character'
 import { useCharacterIO } from '@/composables/useCharacterIO'
 import { PRIMARY_ABILITY_KEYS, PRIMARY_ABILITY_LABELS } from '@/types/character'
+import BulkGenerateDialog from '@/components/dialogs/BulkGenerateDialog.vue'
 
 const store = useCharacterStore()
 const { exportToFile, importFromFile } = useCharacterIO()
 const toast = useToast()
 
 const fileInput = ref<HTMLInputElement | null>(null)
+const bulkGenerateVisible = ref(false)
 
 function triggerImport() {
   fileInput.value?.click()
@@ -80,7 +82,17 @@ function notImplemented(feature: string) {
   toast.add({ severity: 'info', summary: feature, detail: 'Not built yet — stubbed for now.', life: 3000 })
 }
 
-const menuItems = [
+function toggleAutoSave() {
+  store.toggleAutoSave()
+  toast.add({
+    severity: 'info',
+    summary: store.autoSaveEnabled ? 'Auto-Save enabled' : 'Auto-Save disabled',
+    detail: store.autoSaveEnabled ? 'Every generated character will be saved to the database.' : undefined,
+    life: 2500,
+  })
+}
+
+const menuItems = computed(() => [
   {
     label: 'File',
     items: [
@@ -94,6 +106,7 @@ const menuItems = [
     label: 'Generate',
     items: [
       { label: 'Generate All (7-step)', icon: 'pi pi-sparkles', command: handleGenerateAll },
+      { label: 'Bulk Generate & Save to Database…', icon: 'pi pi-database', command: () => (bulkGenerateVisible.value = true) },
       { separator: true },
       { label: 'Physical Form', command: () => store.generatePhysicalForm() },
       { label: 'Origin of Power', command: () => store.generateOrigin() },
@@ -125,17 +138,23 @@ const menuItems = [
         icon: 'pi pi-moon',
         command: toggleDarkMode,
       },
+      {
+        label: store.autoSaveEnabled ? 'Auto-Save to Database: On' : 'Auto-Save to Database: Off',
+        icon: store.autoSaveEnabled ? 'pi pi-check-square' : 'pi pi-stop',
+        command: toggleAutoSave,
+      },
       { separator: true },
       { label: 'Contacts & Background (page 2)', icon: 'pi pi-id-card', command: () => notImplemented('Contacts & Background') },
       { label: 'About', icon: 'pi pi-info-circle', command: () => notImplemented('About') },
     ],
   },
-]
+])
 </script>
 
 <template>
   <Toast />
   <input ref="fileInput" type="file" accept="application/json,.json" class="sr-only" @change="onFileChosen" />
+  <BulkGenerateDialog v-model:visible="bulkGenerateVisible" />
   <Menubar :model="menuItems" class="app-menubar">
     <template #start>
       <span class="app-menubar__title">FASERIP Character Generator</span>
