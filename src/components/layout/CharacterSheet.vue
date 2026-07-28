@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Button from 'primevue/button'
-import AppMenuBar from './AppMenuBar.vue'
 import BasicInfoPanel from '@/components/panels/BasicInfoPanel.vue'
 import WeaknessPanel from '@/components/panels/WeaknessPanel.vue'
 import PrimaryAbilitiesPanel from '@/components/panels/PrimaryAbilitiesPanel.vue'
@@ -21,60 +20,49 @@ function nextPage() {
 </script>
 
 <template>
-  <div class="app-shell">
-    <AppMenuBar />
+  <div class="app-shell__body">
+    <Button
+      class="app-shell__nav app-shell__nav--prev"
+      severity="secondary"
+      text
+      rounded
+      aria-label="Previous page"
+      v-tooltip.right="'Previous page'"
+      @click="prevPage"
+    >
+      <i class="pi pi-chevron-left" />
+    </Button>
 
-    <div class="app-shell__body">
-      <Button
-        class="app-shell__nav app-shell__nav--prev"
-        severity="secondary"
-        text
-        rounded
-        aria-label="Previous page"
-        v-tooltip.right="'Previous page'"
-        @click="prevPage"
-      >
-        <i class="pi pi-chevron-left" />
-      </Button>
+    <main class="app-shell__page">
+      <div v-if="page === 1" class="sheet-page">
+        <BasicInfoPanel class="sheet-page__basic-info" />
+        <WeaknessPanel class="sheet-page__weakness" />
+        <PowersPanel class="sheet-page__powers" />
+        <PrimaryAbilitiesPanel class="sheet-page__primary-abilities" />
+        <TalentsPanel class="sheet-page__talents" />
+      </div>
+      <div v-else class="sheet-page sheet-page--two">
+        <ContactsBackgroundPanel />
+      </div>
 
-      <main class="app-shell__page">
-        <div v-if="page === 1" class="sheet-page">
-          <BasicInfoPanel class="sheet-page__basic-info" />
-          <WeaknessPanel class="sheet-page__weakness" />
-          <PowersPanel class="sheet-page__powers" />
-          <PrimaryAbilitiesPanel class="sheet-page__primary-abilities" />
-          <TalentsPanel class="sheet-page__talents" />
-        </div>
-        <div v-else class="sheet-page sheet-page--two">
-          <ContactsBackgroundPanel />
-        </div>
+      <div class="app-shell__page-indicator">Page {{ page }} / {{ PAGE_COUNT }}</div>
+    </main>
 
-        <div class="app-shell__page-indicator">Page {{ page }} / {{ PAGE_COUNT }}</div>
-      </main>
-
-      <Button
-        class="app-shell__nav app-shell__nav--next"
-        severity="secondary"
-        text
-        rounded
-        aria-label="Next page"
-        v-tooltip.left="'Next page'"
-        @click="nextPage"
-      >
-        <i class="pi pi-chevron-right" />
-      </Button>
-    </div>
+    <Button
+      class="app-shell__nav app-shell__nav--next"
+      severity="secondary"
+      text
+      rounded
+      aria-label="Next page"
+      v-tooltip.left="'Next page'"
+      @click="nextPage"
+    >
+      <i class="pi pi-chevron-right" />
+    </Button>
   </div>
 </template>
 
 <style scoped>
-.app-shell {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: var(--p-content-background);
-}
-
 .app-shell__body {
   flex: 1;
   display: flex;

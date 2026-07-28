@@ -33,11 +33,12 @@ import { abilityBonusForForm, secondaryBonusForForm, powerCountBonusForForm } fr
 import { defaultPowersForForm, type PhysicalFormDefaultPower } from '@/data/physicalFormPowers'
 import { ORIGINS } from '@/data/origins'
 import { OCCUPATIONS } from '@/data/occupations'
-import { WEAKNESS_STIMULUS, WEAKNESS_EFFECT, WEAKNESS_DURATION } from '@/data/weaknesses'
+import { WEAKNESS_STIMULUS, WEAKNESS_EFFECT, WEAKNESS_DURATION, NO_INHERENT_WEAKNESS } from '@/data/weaknesses'
 import { rankRangesForColumn } from '@/data/randomRanksTable'
 import { ABILITY_MODIFIER_TABLE } from '@/data/abilityModifierTable'
 import { POWERS_COUNT_TABLE, TALENTS_COUNT_TABLE } from '@/data/countTables'
-import { POWERS, powerByName, powerSlotCost } from '@/data/powers'
+import { POWERS, powersByCategory, powerByName, powerSlotCost } from '@/data/powers'
+import { POWER_CATEGORIES_TABLE } from '@/data/powerCategories'
 import { TALENTS, talentByName } from '@/data/talents'
 
 // ---------------------------------------------------------------------------
@@ -50,6 +51,19 @@ export function rollPhysicalForm(): string {
 
 export function columnForPhysicalForm(physicalFormName: string): RandomRanksColumn {
   return physicalFormByName(physicalFormName)?.column ?? 2
+}
+
+/** Notes-field text to populate whenever a Physical Form is (re)rolled --
+ * its rules.pdf modifiers, verbatim, plus a caveat when the form grants a
+ * "raise any one ability" pick, since that one is a player choice (the
+ * rules say "may raise") rather than something this app auto-applies --
+ * see racialAnyOneAbilityBonus. */
+export function physicalFormNotes(physicalFormName: string): string {
+  const modifiers = physicalFormByName(physicalFormName)?.modifiers ?? ''
+  const caveat = racialAnyOneAbilityBonus(physicalFormName)
+    ? 'Note: the "raise any one ability" bonus above was not auto-applied -- choose which ability gets it yourself.'
+    : ''
+  return [modifiers, caveat].filter(Boolean).join('\n\n')
 }
 
 export function rollOrigin(): string {
@@ -124,10 +138,15 @@ export function computeKarma(abilities: PrimaryAbilities): number {
 // Weakness
 
 export function rollWeakness(): Weakness {
+  const stimulus = pickFromRanges(WEAKNESS_STIMULUS).name
+  // Effect/Duration have no "none" entry of their own -- when Stimulus lands
+  // on "No Inherent Weakness", leave them blank rather than rolling a random
+  // Effect/Duration for a weakness the character doesn't have.
+  const hasWeakness = stimulus !== NO_INHERENT_WEAKNESS
   return {
-    stimulus: { value: pickFromRanges(WEAKNESS_STIMULUS).name, locked: false },
-    effect: { value: pickFromRanges(WEAKNESS_EFFECT).name, locked: false },
-    duration: { value: pickFromRanges(WEAKNESS_DURATION).name, locked: false },
+    stimulus: { value: stimulus, locked: false },
+    effect: { value: hasWeakness ? pickFromRanges(WEAKNESS_EFFECT).name : '', locked: false },
+    duration: { value: hasWeakness ? pickFromRanges(WEAKNESS_DURATION).name : '', locked: false },
   }
 }
 
@@ -167,8 +186,18 @@ function resolvePowerRank(explicitRank?: RankName): { rank: RankName; rankNumber
   return { rank: rolled.rank, rankNumber: rolled.rankNumber }
 }
 
+/** Rolls a Power category on the Ultimate Powers Table (d100), then a
+ * specific Power uniformly within that category -- matches the book's
+ * two-step "roll category, then roll within it" procedure, rather than a
+ * single flat pick across all categories' Powers. */
+function rollPowerEntry() {
+  const category = pickFromRanges(POWER_CATEGORIES_TABLE)
+  const pool = powersByCategory(category.name)
+  return pool.length ? pickUniform(pool) : pickUniform(POWERS)
+}
+
 export function rollPower(slot: number): PowerSlot {
-  const entry = pickUniform(POWERS)
+  const entry = rollPowerEntry()
   const { rank, rankNumber } = resolvePowerRank()
   return {
     slot,
@@ -355,12 +384,9 @@ export function rollNewCharacter(overrides: CharacterOverrides = {}): Character 
     const tier = bonus ? shiftRank(rolled.rank, bonus) : rankTier(rolled.rank)
     primaryAbilities[key] = { rank: tier.name, rankNumber: tier.rankNumber, locked: false }
   }
-  const anyOneBonus = racialAnyOneAbilityBonus(physicalForm)
-  if (anyOneBonus) {
-    const key = pickUniform(PRIMARY_ABILITY_KEYS)
-    const tier = shiftRank(primaryAbilities[key].rank, anyOneBonus)
-    primaryAbilities[key] = { rank: tier.name, rankNumber: tier.rankNumber, locked: false }
-  }
+  // A "raise any one ability" racial bonus (Humanoid Race, Android) is a
+  // player choice, not auto-applied -- see physicalFormNotes, which flags
+  // it in the Notes field below instead.
 
   const resourcesRolled = rollResourcesRank()
   const resourcesBonus = racialSecondaryBonus(physicalForm, 'resources')
@@ -386,10 +412,13 @@ export function rollNewCharacter(overrides: CharacterOverrides = {}): Character 
   let forcedIndex = 0
   let remainingBudget = powerCount.current
   const powerSlots: PowerSlot[] = Array.from({ length: MAX_POWER_SLOTS }, (_, i) => {
-    if (i >= powerCount.current || remainingBudget <= 0) {
+    // Racially-guaranteed powers (e.g. Demon's Fire Generation + True
+    // Invulnerability) always get a slot, even once the random power-count
+    // roll's budget is exhausted -- see rollNewCharacter's doc comment.
+    const grant = forcedIndex < forcedPowers.length ? forcedPowers[forcedIndex] : undefined
+    if (!grant && (i >= powerCount.current || remainingBudget <= 0)) {
       return { slot: i + 1, name: '', category: '', rank: '' as const, rankNumber: 0, locked: false }
     }
-    const grant = forcedIndex < forcedPowers.length ? forcedPowers[forcedIndex] : undefined
     let rolled: PowerSlot
     if (grant) {
       forcedIndex++
@@ -425,7 +454,7 @@ export function rollNewCharacter(overrides: CharacterOverrides = {}): Character 
       origin: { value: origin, locked: false },
       physicalForm: { value: physicalForm, locked: false },
       occupation: { value: occupation, locked: false },
-      notes: '',
+      notes: physicalFormNotes(physicalForm),
     },
     primaryAbilities,
     secondaryAbilities,

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import Button from 'primevue/button'
+import InputNumber from 'primevue/inputnumber'
 import LockToggle from './LockToggle.vue'
 import { rankTier } from '@/data/ranks'
 
@@ -18,6 +19,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   shift: [delta: number]
   reroll: []
+  'set-number': [value: number]
   'toggle-lock': []
 }>()
 
@@ -29,12 +31,42 @@ const badge = computed(() => {
     return `${props.rank}(${props.rankNumber})`
   }
 })
+
+const isEditing = ref(false)
+const draftNumber = ref(props.rankNumber)
+
+function startEdit() {
+  if (props.locked) return
+  draftNumber.value = props.rankNumber
+  isEditing.value = true
+}
+
+function commitEdit() {
+  if (!isEditing.value) return
+  isEditing.value = false
+  emit('set-number', draftNumber.value ?? props.rankNumber)
+}
+
+function cancelEdit() {
+  isEditing.value = false
+}
 </script>
 
 <template>
   <div class="rank-control" :class="{ 'rank-control--compact': compact, 'rank-control--locked': locked }">
     <span v-if="label" class="rank-control__label">{{ label }}</span>
-    <span class="rank-control__badge">{{ badge }}</span>
+    <span v-if="!isEditing" class="rank-control__badge">{{ badge }}</span>
+    <InputNumber
+      v-else
+      v-model="draftNumber"
+      size="small"
+      :min="0"
+      autofocus
+      class="rank-control__input"
+      @keyup.enter="commitEdit"
+      @keyup.esc="cancelEdit"
+      @blur="commitEdit"
+    />
     <Button
       size="small"
       severity="secondary"
@@ -66,6 +98,18 @@ const badge = computed(() => {
       aria-label="Reroll this field"
       v-tooltip.top="'Reroll'"
       @click="emit('reroll')"
+    >
+      🎲
+    </Button>
+    <Button
+      size="small"
+      severity="secondary"
+      text
+      class="rank-control__btn"
+      :disabled="locked"
+      aria-label="Type an exact rank number"
+      v-tooltip.top="'Type an exact value'"
+      @click="startEdit"
     >
       #
     </Button>
@@ -110,10 +154,22 @@ const badge = computed(() => {
   font-size: 0.8rem;
 }
 
+.rank-control__input {
+  width: 4.5rem;
+}
+
+.rank-control__input :deep(input) {
+  width: 100%;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
 .rank-control__btn {
   width: 1.75rem;
   height: 1.75rem;
   padding: 0;
   font-weight: 700;
+  font-size: 0.9rem;
 }
 </style>

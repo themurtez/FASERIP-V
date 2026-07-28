@@ -23,7 +23,9 @@ function regenerateSection() {
       :current="store.character.powers.count.current"
       :max="store.character.powers.count.max"
       :locked="store.character.powers.count.locked"
+      allow-manual-edit
       @reroll="store.generatePowerCount()"
+      @set-current="(value) => store.setPowerCountNumber(value)"
       @toggle-lock="store.togglePowerCountLock()"
     />
 
@@ -36,6 +38,7 @@ function regenerateSection() {
         @update:name="(name) => store.setPowerName(index, name)"
         @shift="(delta) => store.shiftPowerRank(index, delta)"
         @reroll="store.generatePowerSlot(index)"
+        @set-number="(value) => store.setPowerRankNumber(index, value)"
         @toggle-lock="store.togglePowerSlotLock(index)"
       />
     </div>

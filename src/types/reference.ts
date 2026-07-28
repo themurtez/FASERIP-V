@@ -11,6 +11,8 @@ export interface PowerEntry {
   name: string
   tier: PowerTier
   description: string
+  /** Short table code, e.g. Rule Powers' "R1"-"R8" -- not present for powers sourced from powers.json. */
+  code?: string
 }
 
 export interface TalentEntry {

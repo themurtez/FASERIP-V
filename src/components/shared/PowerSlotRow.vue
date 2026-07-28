@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import Select from 'primevue/select'
 import Button from 'primevue/button'
+import InputNumber from 'primevue/inputnumber'
 import LockToggle from './LockToggle.vue'
 import { POWERS_GROUPED } from '@/data/powers'
 import { rankTier } from '@/data/ranks'
@@ -15,6 +17,7 @@ const emit = defineEmits<{
   'update:name': [value: string]
   shift: [delta: number]
   reroll: []
+  'set-number': [value: number]
   'toggle-lock': []
 }>()
 
@@ -25,6 +28,25 @@ function badge() {
   } catch {
     return `${props.slot.rank}(${props.slot.rankNumber})`
   }
+}
+
+const isEditing = ref(false)
+const draftNumber = ref(props.slot.rankNumber)
+
+function startEdit() {
+  if (props.slot.locked || !props.slot.rank) return
+  draftNumber.value = props.slot.rankNumber
+  isEditing.value = true
+}
+
+function commitEdit() {
+  if (!isEditing.value) return
+  isEditing.value = false
+  emit('set-number', draftNumber.value ?? props.slot.rankNumber)
+}
+
+function cancelEdit() {
+  isEditing.value = false
 }
 </script>
 
@@ -46,7 +68,18 @@ function badge() {
       class="power-row__select"
       @update:model-value="emit('update:name', $event ?? '')"
     />
-    <span class="power-row__badge">{{ badge() }}</span>
+    <span v-if="!isEditing" class="power-row__badge">{{ badge() }}</span>
+    <InputNumber
+      v-else
+      v-model="draftNumber"
+      size="small"
+      :min="0"
+      autofocus
+      class="power-row__input"
+      @keyup.enter="commitEdit"
+      @keyup.esc="cancelEdit"
+      @blur="commitEdit"
+    />
     <Button
       size="small"
       severity="secondary"
@@ -76,6 +109,17 @@ function badge() {
       v-tooltip.top="'Reroll this power'"
       aria-label="Reroll"
       @click="emit('reroll')"
+      >🎲</Button
+    >
+    <Button
+      size="small"
+      severity="secondary"
+      text
+      class="power-row__btn"
+      :disabled="slot.locked || !slot.rank"
+      v-tooltip.top="'Type an exact rank value'"
+      aria-label="Type an exact rank number"
+      @click="startEdit"
       >#</Button
     >
     <LockToggle :locked="slot.locked" @toggle="emit('toggle-lock')" />
@@ -123,6 +167,18 @@ function badge() {
   text-align: center;
   font-size: 0.78rem;
   flex-shrink: 0;
+}
+
+.power-row__input {
+  width: 3.75rem;
+  flex-shrink: 0;
+}
+
+.power-row__input :deep(input) {
+  width: 100%;
+  padding: 0.15rem 0.3rem;
+  font-size: 0.78rem;
+  text-align: center;
 }
 
 .power-row__btn {

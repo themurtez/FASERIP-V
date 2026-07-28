@@ -44,6 +44,7 @@ function regenerateSection() {
         :locked="store.character.primaryAbilities[key].locked"
         @shift="(delta) => store.shiftPrimaryAbility(key, delta)"
         @reroll="store.generatePrimaryAbility(key)"
+        @set-number="(value) => store.setPrimaryAbilityNumber(key, value)"
         @toggle-lock="store.togglePrimaryAbilityLock(key)"
       />
       <RankControl
@@ -53,6 +54,7 @@ function regenerateSection() {
         :locked="store.character.secondaryAbilities.resources.locked"
         @shift="(delta) => store.shiftSecondaryRank('resources', delta)"
         @reroll="store.generateResources()"
+        @set-number="(value) => store.setSecondaryRankNumber('resources', value)"
         @toggle-lock="store.toggleSecondaryLock('resources')"
       />
     </div>

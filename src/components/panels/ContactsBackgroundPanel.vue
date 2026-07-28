@@ -26,6 +26,7 @@ const store = useCharacterStore()
         :locked="store.character.secondaryAbilities.popularity.locked"
         @shift="(delta) => store.shiftSecondaryRank('popularity', delta)"
         @reroll="store.generatePopularity()"
+        @set-number="(value) => store.setSecondaryRankNumber('popularity', value)"
         @toggle-lock="store.toggleSecondaryLock('popularity')"
       />
     </Fieldset>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
 import Toast from 'primevue/toast'
@@ -8,13 +9,18 @@ import { useCharacterStore } from '@/stores/character'
 import { useCharacterIO } from '@/composables/useCharacterIO'
 import { PRIMARY_ABILITY_KEYS, PRIMARY_ABILITY_LABELS } from '@/types/character'
 import BulkGenerateDialog from '@/components/dialogs/BulkGenerateDialog.vue'
+import ExportCharacterDialog from '@/components/dialogs/ExportCharacterDialog.vue'
 
 const store = useCharacterStore()
-const { exportToFile, importFromFile } = useCharacterIO()
+const { importFromFile } = useCharacterIO()
 const toast = useToast()
+const route = useRoute()
+const router = useRouter()
+const isGeneratorRoute = computed(() => route.path === '/')
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const bulkGenerateVisible = ref(false)
+const exportDialogVisible = ref(false)
 
 function triggerImport() {
   fileInput.value?.click()
@@ -38,8 +44,7 @@ async function onFileChosen(event: Event) {
   }
 }
 
-function handleExport() {
-  exportToFile()
+function handleExported() {
   toast.add({ severity: 'success', summary: 'Character exported', life: 2000 })
 }
 
@@ -99,7 +104,7 @@ const menuItems = computed(() => [
       { label: 'New Character', icon: 'pi pi-file', command: handleNew },
       { separator: true },
       { label: 'Import JSON…', icon: 'pi pi-upload', command: triggerImport },
-      { label: 'Export JSON', icon: 'pi pi-download', command: handleExport },
+      { label: 'Export JSON…', icon: 'pi pi-download', command: () => (exportDialogVisible.value = true) },
     ],
   },
   {
@@ -131,6 +136,13 @@ const menuItems = computed(() => [
     ],
   },
   {
+    label: 'Tools',
+    items: [
+      { label: 'Character Generator', icon: 'pi pi-user', command: () => router.push('/') },
+      { label: 'Ability Modifier Roller', icon: 'pi pi-percentage', command: () => router.push('/ability-modifier-roller') },
+    ],
+  },
+  {
     label: 'Options',
     items: [
       {
@@ -155,43 +167,46 @@ const menuItems = computed(() => [
   <Toast />
   <input ref="fileInput" type="file" accept="application/json,.json" class="sr-only" @change="onFileChosen" />
   <BulkGenerateDialog v-model:visible="bulkGenerateVisible" />
+  <ExportCharacterDialog v-model:visible="exportDialogVisible" @exported="handleExported" />
   <Menubar :model="menuItems" class="app-menubar">
     <template #start>
       <span class="app-menubar__title">FASERIP Character Generator</span>
     </template>
     <template #end>
-      <div class="app-menubar__history">
+      <template v-if="isGeneratorRoute">
+        <div class="app-menubar__history">
+          <Button
+            icon="pi pi-angle-left"
+            size="small"
+            severity="secondary"
+            text
+            :disabled="!store.canGoBack"
+            v-tooltip.bottom="'Previous generated character'"
+            aria-label="Previous generated character"
+            @click="store.goBack()"
+          />
+          <span v-if="store.history.length" class="app-menubar__history-count">
+            {{ store.historyPointer + 1 }} / {{ store.history.length }}
+          </span>
+          <Button
+            icon="pi pi-angle-right"
+            size="small"
+            severity="secondary"
+            text
+            :disabled="!store.canGoForward"
+            v-tooltip.bottom="'Next generated character'"
+            aria-label="Next generated character"
+            @click="store.goForward()"
+          />
+        </div>
         <Button
-          icon="pi pi-angle-left"
+          label="Generate All"
+          icon="pi pi-sparkles"
           size="small"
-          severity="secondary"
-          text
-          :disabled="!store.canGoBack"
-          v-tooltip.bottom="'Previous generated character'"
-          aria-label="Previous generated character"
-          @click="store.goBack()"
+          v-tooltip.bottom="'Regenerate everything except locked fields'"
+          @click="handleGenerateAll"
         />
-        <span v-if="store.history.length" class="app-menubar__history-count">
-          {{ store.historyPointer + 1 }} / {{ store.history.length }}
-        </span>
-        <Button
-          icon="pi pi-angle-right"
-          size="small"
-          severity="secondary"
-          text
-          :disabled="!store.canGoForward"
-          v-tooltip.bottom="'Next generated character'"
-          aria-label="Next generated character"
-          @click="store.goForward()"
-        />
-      </div>
-      <Button
-        label="Generate All"
-        icon="pi pi-sparkles"
-        size="small"
-        v-tooltip.bottom="'Regenerate everything except locked fields'"
-        @click="handleGenerateAll"
-      />
+      </template>
     </template>
   </Menubar>
 </template>

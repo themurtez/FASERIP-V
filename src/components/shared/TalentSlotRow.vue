@@ -44,7 +44,7 @@ const emit = defineEmits<{
       v-tooltip.top="'Reroll this talent'"
       aria-label="Reroll"
       @click="emit('reroll')"
-      >#</Button
+      >🎲</Button
     >
     <LockToggle :locked="slot.locked" @toggle="emit('toggle-lock')" />
   </div>

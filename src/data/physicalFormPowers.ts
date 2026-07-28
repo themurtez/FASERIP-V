@@ -12,9 +12,9 @@
 // parts were rolled), and plain "gains one Power/one less Power" adjustments
 // to the power count itself rather than a specific power. Those stay as
 // reference text only. Where there's no exact-name match but a clear closest
-// power (Angel/Demon's "Invulnerability to Fire" -> True Invulnerability,
-// the closest thing to a flat invulnerability in the list), that's used
-// instead, noted per-entry below.
+// power (Angel/Demon's "Invulnerability to Fire" -> Immunity, the power
+// list's flat "immune to one attack type" entry), that's used instead,
+// noted per-entry below.
 
 import type { RankName } from '@/types/character'
 
@@ -34,11 +34,11 @@ export const PHYSICAL_FORM_DEFAULT_POWERS: Record<string, PhysicalFormDefaultPow
   Merhuman: [{ name: 'Water Freedom' }],
   // Fire Generation + Invulnerability to Fire is a Demon-only trait, not
   // Angel's -- no fire-specific invulnerability power exists in the list, so
-  // True Invulnerability (the closest match) stands in for it, rolled
-  // normally (no rank specified). Angel's own trait is its "Bonus: magic
-  // sword (Artifact Creation, Excellent damage)".
+  // Immunity (the closest match) stands in for it, rolled normally (no rank
+  // specified). Angel's own trait is its "Bonus: magic sword (Artifact
+  // Creation, Excellent damage)".
   Angel: [{ name: 'Artifact Creation', rank: 'Excellent' }],
-  Demon: [{ name: 'Fire Generation', rank: 'Good' }, { name: 'True Invulnerability' }],
+  Demon: [{ name: 'Fire Generation', rank: 'Good' }, { name: 'Immunity' }],
   Deity: [{ category: 'Travel' }],
   Animal: [{ category: 'Detection Powers', count: 2, rank: 'Good' }],
   Vegetable: [{ name: 'Energy Absorption', rank: 'Good' }],
@@ -49,4 +49,12 @@ export const PHYSICAL_FORM_DEFAULT_POWERS: Record<string, PhysicalFormDefaultPow
 
 export function defaultPowersForForm(formName: string): PhysicalFormDefaultPower[] {
   return PHYSICAL_FORM_DEFAULT_POWERS[formName] ?? []
+}
+
+/** How many guaranteed Power slots a Physical Form's default grants occupy
+ * (e.g. Demon's Fire Generation + Immunity = 2, Animal's "Two Detection
+ * Powers" = 2) -- a pure count, with no rank/name resolution, so it's cheap
+ * to call from a computed without re-rolling anything. */
+export function defaultPowerCount(formName: string): number {
+  return defaultPowersForForm(formName).reduce((sum, spec) => sum + (spec.count ?? 1), 0)
 }

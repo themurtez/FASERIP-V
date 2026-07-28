@@ -63,3 +63,12 @@ CREATE TABLE IF NOT EXISTS characters (
 
 CREATE INDEX IF NOT EXISTS characters_character_id_idx ON characters (character_id);
 CREATE INDEX IF NOT EXISTS characters_created_at_idx ON characters (created_at);
+CREATE INDEX IF NOT EXISTS characters_weakness_idx ON characters (weakness_effect);
+CREATE INDEX IF NOT EXISTS idx_characters_powers ON public."characters" (powers);
+
+CREATE INDEX IF NOT EXISTS idx_characters_abilities ON public."characters"
+  (strength DESC, reason DESC, endurance DESC, agility DESC);
+
+CREATE INDEX IF NOT EXISTS idx_characters_abilities_powers ON public."characters"
+  (strength DESC, reason DESC, endurance DESC, agility DESC)
+  WHERE powers IS NOT NULL;

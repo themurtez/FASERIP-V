@@ -12,13 +12,19 @@ function slugify(name: string): string {
 export function useCharacterIO() {
   const store = useCharacterStore()
 
-  function exportToFile() {
+  /** Suggested filename for the current character, without extension --
+   * shown pre-filled in the export dialog so the player can override it. */
+  function suggestedFileName(): string {
+    return slugify(store.character.basicInfo.name)
+  }
+
+  function exportToFile(fileName?: string) {
     const json = store.exportJSON()
     const blob = new Blob([json], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `${slugify(store.character.basicInfo.name)}.faserip.json`
+    a.download = `${slugify(fileName || suggestedFileName())}.faserip.json`
     document.body.appendChild(a)
     a.click()
     a.remove()
@@ -30,5 +36,5 @@ export function useCharacterIO() {
     store.importJSON(text)
   }
 
-  return { exportToFile, importFromFile }
+  return { exportToFile, importFromFile, suggestedFileName }
 }

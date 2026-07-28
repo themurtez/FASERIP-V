@@ -4,8 +4,9 @@
 
 import raw from './powers.json'
 import type { PowerEntry } from '@/types/reference'
+import { RULE_POWERS } from './rulePowers'
 
-export const POWERS: PowerEntry[] = raw as PowerEntry[]
+export const POWERS: PowerEntry[] = [...(raw as PowerEntry[]), ...RULE_POWERS]
 
 export const POWER_CATEGORIES: string[] = Array.from(new Set(POWERS.map((p) => p.category)))
 

@@ -54,7 +54,16 @@ export function rankIndex(name: RankName): number {
   return RANK_TIERS.findIndex((t) => t.name === name)
 }
 
-/** Shift a rank up/down by `delta` Column Shifts, clamped to the ladder's ends. */
+/** Shift a rank up/down by `delta` Column Shifts, clamped to the ladder's ends.
+ * Used for both manual +/- shifting and automatic Physical Form racial
+ * bonuses (e.g. Demon's "+1CS to all Physical Abilities") -- the book's
+ * Feeble..Monstrous ceiling applies to a table *roll*, not to a defined,
+ * deterministic bonus stacked on top of one, so a roll that lands at
+ * Monstrous and then gets a racial +1CS legitimately reaches Unearthly. The
+ * one case that needed capping -- a race's *random* "raise any one ability"
+ * pick -- is instead simply not auto-applied at all (see
+ * racialAnyOneAbilityBonus's doc comment), so no separate clamped variant is
+ * needed here. */
 export function shiftRank(name: RankName, delta: number): RankTier {
   const idx = rankIndex(name)
   const next = Math.min(RANK_TIERS.length - 1, Math.max(0, idx + delta))
@@ -63,4 +72,19 @@ export function shiftRank(name: RankName, delta: number): RankTier {
 
 export function formatRank(rank: RankName, rankNumber: number): string {
   return `${rankTier(rank).abbreviation}(${rankNumber})`
+}
+
+/** The named tier a raw rank NUMBER falls under -- the highest tier on the
+ * ladder whose own number is <= n (e.g. 20 -> Excellent, 999 -> Shift Z).
+ * Used for manual rank-number entry ("#"), where a player types an exact
+ * number rather than picking/rolling a name; the typed number itself is
+ * kept as-is (not snapped to the tier's canonical number), only the label
+ * next to it is derived this way. */
+export function rankForNumber(n: number): RankTier {
+  let match = RANK_TIERS[0] as RankTier
+  for (const tier of RANK_TIERS) {
+    if (tier.rankNumber > n) break
+    match = tier
+  }
+  return match
 }

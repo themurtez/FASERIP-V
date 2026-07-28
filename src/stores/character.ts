@@ -3,13 +3,13 @@
 // every "Generate" menu action and every per-row "#" button routes through
 // here, so lock semantics can't drift between call sites.
 
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { defineStore } from 'pinia'
 import type { Character, PrimaryAbilityKey } from '@/types/character'
 import { PRIMARY_ABILITY_KEYS, SCHEMA_VERSION } from '@/types/character'
-import { rankTier, shiftRank } from '@/data/ranks'
+import { rankTier, shiftRank, rankForNumber } from '@/data/ranks'
 import { powerSlotCost } from '@/data/powers'
-import { pickUniform } from '@/generators/dice'
+import { defaultPowerCount } from '@/data/physicalFormPowers'
 import * as gen from '@/generators/generateCharacter'
 import { saveCharacterToDb } from '@/services/characterDb'
 
@@ -26,6 +26,7 @@ export const useCharacterStore = defineStore('character', () => {
     const f = character.value.basicInfo.physicalForm
     if (f.locked) return
     f.value = gen.rollPhysicalForm()
+    character.value.basicInfo.notes = gen.physicalFormNotes(f.value)
     touch()
   }
 
@@ -48,6 +49,69 @@ export const useCharacterStore = defineStore('character', () => {
     f.locked = !f.locked
   }
 
+  // -- Origin/Physical Form/Occupation persistence ---------------------------
+  //
+  // These 3 fields (value + lock state) survive a reload independent of the
+  // rest of the character -- restored below before the initial boot roll
+  // further down, which skips re-rolling them when a snapshot was restored
+  // (see generateAll's `skipIdentity` option), and re-saved on every change
+  // (roll, manual dropdown pick, or lock toggle all flow through here).
+
+  interface BasicInfoIdentitySnapshot {
+    origin: { value: string; locked: boolean }
+    physicalForm: { value: string; locked: boolean }
+    occupation: { value: string; locked: boolean }
+  }
+
+  const BASIC_INFO_IDENTITY_KEY = 'faserip.basicInfoIdentity.v1'
+
+  function isLockedStringValue(v: unknown): v is { value: string; locked: boolean } {
+    const candidate = v as { value?: unknown; locked?: unknown } | null
+    return !!candidate && typeof candidate.value === 'string' && typeof candidate.locked === 'boolean'
+  }
+
+  function loadBasicInfoIdentity(): BasicInfoIdentitySnapshot | null {
+    try {
+      const raw = localStorage.getItem(BASIC_INFO_IDENTITY_KEY)
+      if (!raw) return null
+      const parsed = JSON.parse(raw)
+      if (
+        parsed &&
+        typeof parsed === 'object' &&
+        isLockedStringValue(parsed.origin) &&
+        isLockedStringValue(parsed.physicalForm) &&
+        isLockedStringValue(parsed.occupation)
+      ) {
+        return parsed as BasicInfoIdentitySnapshot
+      }
+      return null
+    } catch {
+      return null
+    }
+  }
+
+  function persistBasicInfoIdentity() {
+    try {
+      const { origin, physicalForm, occupation } = character.value.basicInfo
+      localStorage.setItem(BASIC_INFO_IDENTITY_KEY, JSON.stringify({ origin, physicalForm, occupation }))
+    } catch {
+      // Storage full or unavailable -- this just won't survive a reload this session.
+    }
+  }
+
+  const persistedIdentity = loadBasicInfoIdentity()
+  if (persistedIdentity) {
+    character.value.basicInfo.origin = { ...persistedIdentity.origin }
+    character.value.basicInfo.physicalForm = { ...persistedIdentity.physicalForm }
+    character.value.basicInfo.occupation = { ...persistedIdentity.occupation }
+  }
+
+  watch(
+    () => [character.value.basicInfo.origin, character.value.basicInfo.physicalForm, character.value.basicInfo.occupation],
+    persistBasicInfoIdentity,
+    { deep: true },
+  )
+
   // -- Primary Abilities -------------------------------------------------------
 
   function currentColumn() {
@@ -66,25 +130,14 @@ export const useCharacterStore = defineStore('character', () => {
     touch()
   }
 
-  /** After the deterministic per-ability racial bonuses (applied inside
-   * generatePrimaryAbility), some races grant a free "raise any one Primary
-   * Ability +NCS" pick -- resolved once, here, across the whole set. */
-  function applyAnyOneRacialBonus() {
-    const bonus = gen.racialAnyOneAbilityBonus(character.value.basicInfo.physicalForm.value)
-    if (!bonus) return
-    const eligible = PRIMARY_ABILITY_KEYS.filter((key) => !character.value.primaryAbilities[key].locked)
-    if (!eligible.length) return
-    const a = character.value.primaryAbilities[pickUniform(eligible)]
-    const tier = shiftRank(a.rank, bonus)
-    a.rank = tier.name
-    a.rankNumber = tier.rankNumber
-    recomputeHealthKarma()
-    touch()
-  }
+  // Some races grant a free "raise any one Primary Ability +NCS" pick (e.g.
+  // Humanoid Race, Android) -- the rules say "may raise", which reads as the
+  // player's choice of ability, not something to auto-roll. It's left
+  // unapplied; generatePhysicalForm surfaces it as a Notes-field reminder
+  // instead (see gen.physicalFormNotes).
 
   function generateAllPrimaryAbilities() {
     for (const key of PRIMARY_ABILITY_KEYS) generatePrimaryAbility(key)
-    applyAnyOneRacialBonus()
   }
 
   function shiftPrimaryAbility(key: PrimaryAbilityKey, delta: number) {
@@ -99,6 +152,18 @@ export const useCharacterStore = defineStore('character', () => {
 
   function togglePrimaryAbilityLock(key: PrimaryAbilityKey) {
     character.value.primaryAbilities[key].locked = !character.value.primaryAbilities[key].locked
+  }
+
+  /** Manual entry ("#"): the player types an exact rank number instead of
+   * rolling/shifting -- kept as typed (not snapped to a tier's canonical
+   * number), labeled with whichever named tier it falls under. */
+  function setPrimaryAbilityNumber(key: PrimaryAbilityKey, value: number) {
+    const a = character.value.primaryAbilities[key]
+    if (a.locked) return
+    a.rank = rankForNumber(value).name
+    a.rankNumber = value
+    recomputeHealthKarma()
+    touch()
   }
 
   // -- Secondary Abilities ------------------------------------------------------
@@ -146,6 +211,15 @@ export const useCharacterStore = defineStore('character', () => {
     f.locked = !f.locked
   }
 
+  /** Manual entry ("#") for Resources/Popularity -- see setPrimaryAbilityNumber. */
+  function setSecondaryRankNumber(field: 'resources' | 'popularity', value: number) {
+    const f = character.value.secondaryAbilities[field]
+    if (f.locked) return
+    f.rank = rankForNumber(value).name
+    f.rankNumber = value
+    touch()
+  }
+
   // -- Weakness ------------------------------------------------------------
 
   function generateWeakness() {
@@ -175,6 +249,16 @@ export const useCharacterStore = defineStore('character', () => {
 
   function togglePowerCountLock() {
     character.value.powers.count.locked = !character.value.powers.count.locked
+  }
+
+  /** Manual entry ("#") for Number of Powers -- clamped to [0, max], since
+   * unlike a rank number there's no sense in which "more powers than the
+   * roll's own ceiling allows" is a valid typed value here. */
+  function setPowerCountNumber(value: number) {
+    const c = character.value.powers.count
+    if (c.locked) return
+    c.current = Math.min(c.max, Math.max(0, value))
+    touch()
   }
 
   function generatePowerSlot(index: number) {
@@ -213,7 +297,13 @@ export const useCharacterStore = defineStore('character', () => {
     let forcedIndex = 0
     let remaining = budget
     for (let i = 0; i < slots.length; i++) {
-      if (i >= budget || remaining <= 0) {
+      // Racially-guaranteed powers (e.g. Demon's Fire Generation + True
+      // Invulnerability) always get placed, even once the random power-count
+      // roll's budget is exhausted -- they're automatic per the rules, not
+      // subject to that roll. Only once every forced grant has a slot does
+      // running out of budget start clearing/skipping slots again.
+      const hasPendingForcedGrant = forcedIndex < forced.length
+      if (!hasPendingForcedGrant && (i >= budget || remaining <= 0)) {
         // Beyond the budget (or beyond MAX_POWER_SLOTS worth of prior rolls) --
         // clear it rather than leaving a stale, merely-dimmed-out power behind.
         clearPowerSlot(i)
@@ -224,7 +314,7 @@ export const useCharacterStore = defineStore('character', () => {
         remaining -= powerSlotCost(slot.name)
         continue
       }
-      if (forcedIndex < forced.length) {
+      if (hasPendingForcedGrant) {
         const grant = forced[forcedIndex++]
         slot.name = grant.name
         slot.category = grant.category
@@ -240,10 +330,14 @@ export const useCharacterStore = defineStore('character', () => {
 
   const activePowerSlotCount = computed(() => {
     const budget = character.value.powers.count.current
+    // Mirrors generateActivePowerSlots' budget bypass for forced grants, so
+    // a guaranteed racial power past the roll's budget (e.g. Demon's True
+    // Invulnerability) shows as active rather than dimmed.
+    const forcedCount = defaultPowerCount(character.value.basicInfo.physicalForm.value)
     let remaining = budget
     let n = 0
     for (const slot of character.value.powers.slots) {
-      if (n >= budget || remaining <= 0) break
+      if (n >= forcedCount && (n >= budget || remaining <= 0)) break
       remaining -= powerSlotCost(slot.name)
       n++
     }
@@ -264,6 +358,16 @@ export const useCharacterStore = defineStore('character', () => {
     const tier = shiftRank(slot.rank, delta)
     slot.rank = tier.name
     slot.rankNumber = tier.rankNumber
+    touch()
+  }
+
+  /** Manual entry ("#") for a Power's rank -- see setPrimaryAbilityNumber.
+   * Requires a Power to already be picked (a name), same as shiftPowerRank. */
+  function setPowerRankNumber(index: number, value: number) {
+    const slot = character.value.powers.slots[index]
+    if (!slot || slot.locked || !slot.rank) return
+    slot.rank = rankForNumber(value).name
+    slot.rankNumber = value
     touch()
   }
 
@@ -326,11 +430,18 @@ export const useCharacterStore = defineStore('character', () => {
   // -- Orchestration ------------------------------------------------------
 
   /** The book's 7-step order, plus Occupation/Talents which the screenshot
-   * shows but rules.pdf doesn't formally cover as their own step. */
-  function generateAll() {
-    generatePhysicalForm()
-    generateOrigin()
-    generateOccupation()
+   * shows but rules.pdf doesn't formally cover as their own step.
+   *
+   * `skipIdentity` leaves Origin/Physical Form/Occupation untouched entirely
+   * (not just when locked) -- used once, at boot, when a persisted identity
+   * snapshot was just restored (see the persistence block above), so
+   * reloading the page doesn't roll a fresh one over it. */
+  function generateAll(options: { skipIdentity?: boolean } = {}) {
+    if (!options.skipIdentity) {
+      generatePhysicalForm()
+      generateOrigin()
+      generateOccupation()
+    }
     generateAllPrimaryAbilities()
     recomputeHealthKarma()
     generateResources()
@@ -434,8 +545,10 @@ export const useCharacterStore = defineStore('character', () => {
 
   // Boot with a fully generated character rather than a wall of blanks --
   // the store is created once per app load, so this runs exactly once.
+  // Origin/Physical Form/Occupation are skipped here when a persisted
+  // identity was restored above, so a reload doesn't clobber them.
   // (generateAll() records its own history entry and auto-saves if enabled.)
-  generateAll()
+  generateAll({ skipIdentity: !!persistedIdentity })
 
   // -- Import / export ------------------------------------------------------
 
@@ -473,21 +586,25 @@ export const useCharacterStore = defineStore('character', () => {
     generatePrimaryAbility,
     generateAllPrimaryAbilities,
     shiftPrimaryAbility,
+    setPrimaryAbilityNumber,
     togglePrimaryAbilityLock,
     recomputeHealthKarma,
     generateResources,
     generatePopularity,
     shiftSecondaryRank,
+    setSecondaryRankNumber,
     toggleSecondaryLock,
     generateWeakness,
     toggleWeaknessLock,
     generatePowerCount,
+    setPowerCountNumber,
     togglePowerCountLock,
     generatePowerSlot,
     generateActivePowerSlots,
     activePowerSlotCount,
     setPowerName,
     shiftPowerRank,
+    setPowerRankNumber,
     togglePowerSlotLock,
     generateTalentCount,
     toggleTalentCountLock,
