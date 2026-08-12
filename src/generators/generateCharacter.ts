@@ -29,7 +29,14 @@ import type { RandomRanksColumn } from '@/types/reference'
 import { pickFromRanges, pickUniform } from './dice'
 import { rankTier, rankIndex, RANK_TIERS, shiftRank } from '@/data/ranks'
 import { PHYSICAL_FORMS, physicalFormByName } from '@/data/physicalForms'
-import { abilityBonusForForm, secondaryBonusForForm, powerCountBonusForForm } from '@/data/physicalFormBonuses'
+import { PHYSICAL_FORM_TABLE, PHYSICAL_FORM_TABLE_NAME_MAP } from '@/data/physicalFormTable'
+import { COMPOUND_NUMBER_TABLE } from '@/data/countTables'
+import {
+  abilityBonusForForm,
+  secondaryBonusForForm,
+  powerCountBonusForForm,
+  healthMultiplierForForm,
+} from '@/data/physicalFormBonuses'
 import { defaultPowersForForm, type PhysicalFormDefaultPower } from '@/data/physicalFormPowers'
 import { ORIGINS } from '@/data/origins'
 import { OCCUPATIONS } from '@/data/occupations'
@@ -44,9 +51,14 @@ import { TALENTS, talentByName } from '@/data/talents'
 // ---------------------------------------------------------------------------
 // Physical Form / Origin / Occupation -- simple string picks
 
-/** Mocked: real table would weight this toward common forms (Normal Human etc). */
+/** Rolls the top-level Physical Form Table (d100, see physicalFormTable.ts).
+ * "Angel/Demon" shares a single roll in that table -- resolved here with an
+ * even coin flip between the two, since the book doesn't split that roll
+ * further. */
 export function rollPhysicalForm(): string {
-  return pickUniform(PHYSICAL_FORMS).name
+  const rolled = pickFromRanges(PHYSICAL_FORM_TABLE).name
+  if (rolled === 'Angel/Demon') return pickUniform(['Angel', 'Demon'])
+  return PHYSICAL_FORM_TABLE_NAME_MAP[rolled] ?? rolled
 }
 
 export function columnForPhysicalForm(physicalFormName: string): RandomRanksColumn {
@@ -63,7 +75,14 @@ export function physicalFormNotes(physicalFormName: string): string {
   const caveat = racialAnyOneAbilityBonus(physicalFormName)
     ? 'Note: the "raise any one ability" bonus above was not auto-applied -- choose which ability gets it yourself.'
     : ''
-  return [modifiers, caveat].filter(Boolean).join('\n\n')
+  const compoundRoll =
+    physicalFormName === 'Compound' || physicalFormName === 'Changeling'
+      ? (() => {
+          const roll = pickFromRanges(COMPOUND_NUMBER_TABLE)
+          return `Rolled ${roll.count} Body Types, retaining ${roll.retainPercent}% of each one's advantages/disadvantages. Work out the specific mix (and, for a Compound, which single Random Ranks column it uses) with the Judge -- not auto-generated.`
+        })()
+      : ''
+  return [modifiers, caveat, compoundRoll].filter(Boolean).join('\n\n')
 }
 
 export function rollOrigin(): string {
@@ -121,13 +140,17 @@ export function racialSecondaryBonus(physicalFormName: string, field: 'resources
   return secondaryBonusForForm(physicalFormName)?.[field] ?? 0
 }
 
-export function computeHealth(abilities: PrimaryAbilities): number {
-  return (
+/** `physicalFormName`, when given, applies a racial Health multiplier (e.g.
+ * Mineral Life's "Initial Health is doubled") -- omit it to get the raw sum,
+ * as callers that don't yet know the Physical Form still need to. */
+export function computeHealth(abilities: PrimaryAbilities, physicalFormName?: string): number {
+  const base =
     abilities.fighting.rankNumber +
     abilities.agility.rankNumber +
     abilities.strength.rankNumber +
     abilities.endurance.rankNumber
-  )
+  const multiplier = physicalFormName ? healthMultiplierForForm(physicalFormName) : 1
+  return base * multiplier
 }
 
 export function computeKarma(abilities: PrimaryAbilities): number {
@@ -401,7 +424,7 @@ export function rollNewCharacter(overrides: CharacterOverrides = {}): Character 
     : rankTier(popularityRolled.rank)
 
   const secondaryAbilities: SecondaryAbilities = {
-    health: { value: computeHealth(primaryAbilities), locked: false },
+    health: { value: computeHealth(primaryAbilities, physicalForm), locked: false },
     karma: { value: computeKarma(primaryAbilities), locked: false },
     resources: { rank: resourcesTier.name, rankNumber: resourcesTier.rankNumber, locked: false },
     popularity: { rank: popularityTier.name, rankNumber: popularityTier.rankNumber, locked: false },

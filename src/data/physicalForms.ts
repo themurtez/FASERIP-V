@@ -271,7 +271,8 @@ export const PHYSICAL_FORMS: PhysicalFormEntry[] = [
     name: 'Ethereal',
     group: 'Exotic Matter',
     column: 1,
-    modifiers: 'Fighting is zero on Earth (unless fighting another Ethereal). Physical attacks -9CS effect.',
+    modifiers:
+      'Fighting -1CS, unless fighting another Ethereal (not auto-applied for that matchup -- restore Fighting yourself in that fight). Physical attacks against an Ethereal have a decreased effect (-9CS).',
   },
   {
     name: 'Undead',
@@ -284,14 +285,16 @@ export const PHYSICAL_FORMS: PhysicalFormEntry[] = [
     group: 'Compound',
     column: 3,
     columnAssumed: true,
-    modifiers: 'Body combines 2-5 Body Types (rolled); retains a mix of their advantages/disadvantages.',
+    modifiers:
+      'Body combines 2-5 Body Types (roll on the Compound Number table, which also gives what % of each Body Type\'s advantages/disadvantages are retained) -- work out the mix with the Judge. Compounds roll on whichever single column the resulting mix calls for, not a fixed one.',
   },
   {
     name: 'Changeling',
     group: 'Compound',
     column: 5,
+    columnAssumed: true,
     modifiers:
-      '2-5 Aspects, each with its own unique Power. 10 turns to transform between Aspects; -2CS all Primary Abilities while transforming.',
+      '2-5 Aspects (roll on the Compound Number table), each with its own unique Power not shared with any other Aspect -- work out each Aspect\'s Body Type and Power with the Judge. Popularity -1CS (cumulative with any losses from the Aspects themselves). 10 turns to transform between Aspects; -2CS all Primary Abilities while transforming.',
   },
 ]
 

@@ -171,7 +171,11 @@ export const useCharacterStore = defineStore('character', () => {
   function recomputeHealthKarma() {
     const health = character.value.secondaryAbilities.health
     const karma = character.value.secondaryAbilities.karma
-    if (!health.locked) health.value = gen.computeHealth(character.value.primaryAbilities)
+    if (!health.locked)
+      health.value = gen.computeHealth(
+        character.value.primaryAbilities,
+        character.value.basicInfo.physicalForm.value,
+      )
     if (!karma.locked) karma.value = gen.computeKarma(character.value.primaryAbilities)
   }
 

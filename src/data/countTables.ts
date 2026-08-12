@@ -50,6 +50,30 @@ export const TALENTS_COUNT_TABLE: CountRoll[] = [
   row(100, 100, 6, 8), // "00"
 ]
 
+// Compound Body Type's "Number of Body Types combined" table (rules.pdf
+// p.9-10) -- one roll gives both how many Body Types (2-5) make up the
+// Compound and what % of each one's advantages/disadvantages is retained.
+// Not itself enough to auto-generate a Compound (the actual N sub-rolls and
+// merging their bonuses/powers is a manual, Judge-assisted step -- see
+// physicalForms.ts's Compound/Changeling notes), but useful to surface the
+// roll result to the player.
+
+export interface CompoundRoll extends RollRange {
+  count: number
+  retainPercent: number
+}
+
+function compoundRow(min: number, max: number, count: number, retainPercent: number): CompoundRoll {
+  return { name: `${min}-${max}`, min, max, count, retainPercent }
+}
+
+export const COMPOUND_NUMBER_TABLE: CompoundRoll[] = [
+  compoundRow(1, 50, 2, 50),
+  compoundRow(51, 75, 3, 33),
+  compoundRow(76, 95, 4, 25),
+  compoundRow(96, 100, 5, 20), // "00"
+]
+
 export const CONTACTS_COUNT_TABLE: CountRoll[] = [
   row(1, 12, 0, 2),
   row(13, 26, 0, 4),

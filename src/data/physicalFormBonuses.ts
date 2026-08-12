@@ -46,6 +46,11 @@ export const PHYSICAL_FORM_ABILITY_BONUSES: Record<string, PhysicalFormAbilityBo
   Vegetable: { fixed: { fighting: -2, endurance: 2 } },
   'Abnormal Biochemistry': { fixed: { endurance: 1 } },
   Undead: { fixed: { strength: 1, endurance: 1 } },
+  // rules.pdf: "Fighting rank is decreased -1CS unless the Ethereal is
+  // fighting another Ethereal" -- the flat penalty is auto-applied; the
+  // against-another-Ethereal exception is a combat-context call the sheet
+  // can't know ahead of time, so it stays in physicalFormNotes instead.
+  Ethereal: { fixed: { fighting: -1 } },
 }
 
 export function abilityBonusForForm(formName: string): PhysicalFormAbilityBonus | undefined {
@@ -55,6 +60,8 @@ export function abilityBonusForForm(formName: string): PhysicalFormAbilityBonus 
 export interface PhysicalFormSecondaryBonus {
   resources?: number
   popularity?: number
+  /** Flat multiplier on computed Health, e.g. Mineral Life's "Initial Health is doubled." */
+  healthMultiplier?: number
 }
 
 export const PHYSICAL_FORM_SECONDARY_BONUSES: Record<string, PhysicalFormSecondaryBonus> = {
@@ -66,10 +73,16 @@ export const PHYSICAL_FORM_SECONDARY_BONUSES: Record<string, PhysicalFormSeconda
   'Avian - Angel': { popularity: 1 },
   Merhuman: { popularity: 1 },
   'Robot - Computer': { resources: 1 },
+  Changeling: { popularity: -1 },
+  'Mineral Life': { healthMultiplier: 2 },
 }
 
 export function secondaryBonusForForm(formName: string): PhysicalFormSecondaryBonus | undefined {
   return PHYSICAL_FORM_SECONDARY_BONUSES[formName]
+}
+
+export function healthMultiplierForForm(formName: string): number {
+  return PHYSICAL_FORM_SECONDARY_BONUSES[formName]?.healthMultiplier ?? 1
 }
 
 /** Flat delta to the rolled starting Power count (both `current` and `max`),
