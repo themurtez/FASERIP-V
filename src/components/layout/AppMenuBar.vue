@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
@@ -82,6 +82,35 @@ function toggleDarkMode() {
   isDark.value = !isDark.value
   document.documentElement.classList.toggle('app-dark', isDark.value)
 }
+
+// Control+Left/Right walks back/forward through the generated-character
+// history. ⌘+Left/Right is accepted as well: macOS reserves Ctrl+Left/Right
+// at the OS level (Mission Control "move left/right a space"), so the Ctrl
+// form is the one that works on Windows/Linux while ⌘ is the equivalent on
+// macOS. Only active on the generator route, and skipped while an input,
+// textarea, select, or contenteditable element is focused so the browser's
+// word-by-word cursor navigation keeps working inside fields.
+function isEditableTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false
+  return target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)
+}
+
+function onHistoryKeydown(event: KeyboardEvent) {
+  if ((!event.ctrlKey && !event.metaKey) || event.altKey || event.shiftKey) return
+  if (!isGeneratorRoute.value || isEditableTarget(event.target)) return
+  if (event.key === 'ArrowLeft') {
+    event.preventDefault()
+    if (store.canGoBack) store.goBack()
+  } else if (event.key === 'ArrowRight') {
+    event.preventDefault()
+    if (store.canGoForward) store.goForward()
+  }
+}
+
+// Capture phase so the shortcut still fires when a PrimeVue control has
+// focus and stops arrow-key events from bubbling.
+onMounted(() => window.addEventListener('keydown', onHistoryKeydown, true))
+onBeforeUnmount(() => window.removeEventListener('keydown', onHistoryKeydown, true))
 
 function notImplemented(feature: string) {
   toast.add({ severity: 'info', summary: feature, detail: 'Not built yet — stubbed for now.', life: 3000 })
@@ -181,7 +210,7 @@ const menuItems = computed(() => [
             severity="secondary"
             text
             :disabled="!store.canGoBack"
-            v-tooltip.bottom="'Previous generated character'"
+            v-tooltip.bottom="'Previous generated character (Ctrl/⌘+←)'"
             aria-label="Previous generated character"
             @click="store.goBack()"
           />
@@ -194,7 +223,7 @@ const menuItems = computed(() => [
             severity="secondary"
             text
             :disabled="!store.canGoForward"
-            v-tooltip.bottom="'Next generated character'"
+            v-tooltip.bottom="'Next generated character (Ctrl/⌘+→)'"
             aria-label="Next generated character"
             @click="store.goForward()"
           />
