@@ -173,6 +173,12 @@ export function rollWeakness(): Weakness {
   }
 }
 
+/** True when a character's Stimulus names an actual weakness. "No Inherent
+ * Weakness" is the book's explicit "none" entry -- see rollWeakness. */
+export function hasWeakness(weakness: Weakness): boolean {
+  return weakness.stimulus.value !== NO_INHERENT_WEAKNESS
+}
+
 // ---------------------------------------------------------------------------
 // Powers
 //

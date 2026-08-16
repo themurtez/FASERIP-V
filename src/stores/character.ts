@@ -226,12 +226,15 @@ export const useCharacterStore = defineStore('character', () => {
 
   // -- Weakness ------------------------------------------------------------
 
-  function generateWeakness() {
+  function generateWeakness(force = false) {
     const w = character.value.weakness
     const rolled = gen.rollWeakness()
-    if (!w.stimulus.locked) w.stimulus.value = rolled.stimulus.value
-    if (!w.effect.locked) w.effect.value = rolled.effect.value
-    if (!w.duration.locked) w.duration.value = rolled.duration.value
+    // `force` is used by the "skip characters with weakness" option: the whole
+    // point of that option is that a weakness must never survive generation,
+    // so a locked weakness field can't be allowed to veto the reroll.
+    if (force || !w.stimulus.locked) w.stimulus.value = rolled.stimulus.value
+    if (force || !w.effect.locked) w.effect.value = rolled.effect.value
+    if (force || !w.duration.locked) w.duration.value = rolled.duration.value
     touch()
   }
 
@@ -314,12 +317,14 @@ export const useCharacterStore = defineStore('character', () => {
         continue
       }
       const slot = slots[i]
+      if (!slot) continue
       if (slot.locked) {
         remaining -= powerSlotCost(slot.name)
         continue
       }
       if (hasPendingForcedGrant) {
         const grant = forced[forcedIndex++]
+        if (!grant) continue
         slot.name = grant.name
         slot.category = grant.category
         slot.rank = grant.rank
@@ -440,7 +445,7 @@ export const useCharacterStore = defineStore('character', () => {
    * (not just when locked) -- used once, at boot, when a persisted identity
    * snapshot was just restored (see the persistence block above), so
    * reloading the page doesn't roll a fresh one over it. */
-  function generateAll(options: { skipIdentity?: boolean } = {}) {
+  function generateAllOnce(options: { skipIdentity?: boolean } = {}) {
     if (!options.skipIdentity) {
       generatePhysicalForm()
       generateOrigin()
@@ -450,13 +455,34 @@ export const useCharacterStore = defineStore('character', () => {
     recomputeHealthKarma()
     generateResources()
     generatePopularity()
-    generateWeakness()
+    generateWeakness(skipWeaknessEnabled.value)
     generatePowerCount()
     generateActivePowerSlots()
     generateTalentCount()
     generateActiveTalentSlots()
+  }
+
+  function generateAll(options: { skipIdentity?: boolean } = {}) {
+    if (skipWeaknessEnabled.value) {
+      // Rejection-sample the whole character until the weakness roll comes up
+      // "No Inherent Weakness". Each iteration is a fresh roll of every
+      // unlocked field; the weakness is force-rolled every time (see
+      // generateWeakness) so a locked weakness can't wedge the loop. A hard
+      // cap guards against an astronomically unlikely all-weakness streak.
+      const MAX_ATTEMPTS = 1000
+      let attempts = 0
+      do {
+        generateAllOnce(options)
+        attempts++
+      } while (gen.hasWeakness(character.value.weakness) && attempts < MAX_ATTEMPTS)
+    } else {
+      generateAllOnce(options)
+    }
+
     recordHistory()
-    if (autoSaveEnabled.value) {
+    // While "skip characters with weakness" is on, generated characters are
+    // kept in the in-app history only -- never written to the database.
+    if (autoSaveEnabled.value && !skipWeaknessEnabled.value) {
       saveCharacterToDb(character.value)
     }
   }
@@ -547,6 +573,25 @@ export const useCharacterStore = defineStore('character', () => {
     }
   }
 
+  // -- Skip characters with weakness -----------------------------------------
+  //
+  // When enabled (Options menu), generateAll() rerolls the entire character
+  // until the weakness roll comes up "No Inherent Weakness", and it never
+  // writes the result to the database -- only to the in-app history. Persists
+  // across reloads like auto-save.
+
+  const SKIP_WEAKNESS_KEY = 'faserip.skipWeaknessEnabled'
+  const skipWeaknessEnabled = ref(localStorage.getItem(SKIP_WEAKNESS_KEY) === 'true')
+
+  function toggleSkipWeakness() {
+    skipWeaknessEnabled.value = !skipWeaknessEnabled.value
+    try {
+      localStorage.setItem(SKIP_WEAKNESS_KEY, String(skipWeaknessEnabled.value))
+    } catch {
+      // Storage full or unavailable -- the toggle still works for this session.
+    }
+  }
+
   // Boot with a fully generated character rather than a wall of blanks --
   // the store is created once per app load, so this runs exactly once.
   // Origin/Physical Form/Occupation are skipped here when a persisted
@@ -628,5 +673,7 @@ export const useCharacterStore = defineStore('character', () => {
     goForward,
     autoSaveEnabled,
     toggleAutoSave,
+    skipWeaknessEnabled,
+    toggleSkipWeakness,
   }
 })

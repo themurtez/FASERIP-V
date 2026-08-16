@@ -126,6 +126,20 @@ function toggleAutoSave() {
   })
 }
 
+function toggleSkipWeakness() {
+  store.toggleSkipWeakness()
+  toast.add({
+    severity: 'info',
+    summary: store.skipWeaknessEnabled
+      ? 'Skip Characters with Weakness enabled'
+      : 'Skip Characters with Weakness disabled',
+    detail: store.skipWeaknessEnabled
+      ? 'Characters are rerolled until no weakness is generated, and are not saved to the database.'
+      : undefined,
+    life: 3000,
+  })
+}
+
 const menuItems = computed(() => [
   {
     label: 'File',
@@ -183,6 +197,13 @@ const menuItems = computed(() => [
         label: store.autoSaveEnabled ? 'Auto-Save to Database: On' : 'Auto-Save to Database: Off',
         icon: store.autoSaveEnabled ? 'pi pi-check-square' : 'pi pi-stop',
         command: toggleAutoSave,
+      },
+      {
+        label: store.skipWeaknessEnabled
+          ? 'Skip Characters with Weakness: On'
+          : 'Skip Characters with Weakness: Off',
+        icon: store.skipWeaknessEnabled ? 'pi pi-check-square' : 'pi pi-stop',
+        command: toggleSkipWeakness,
       },
       { separator: true },
       { label: 'Contacts & Background (page 2)', icon: 'pi pi-id-card', command: () => notImplemented('Contacts & Background') },
