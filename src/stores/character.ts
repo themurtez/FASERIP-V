@@ -5,16 +5,21 @@
 
 import { computed, ref, watch } from 'vue'
 import { defineStore } from 'pinia'
+import { v4 as uuidv4 } from 'uuid'
 import type { Character, PrimaryAbilityKey } from '@/types/character'
 import { PRIMARY_ABILITY_KEYS, SCHEMA_VERSION } from '@/types/character'
 import { rankTier, shiftRank, rankForNumber } from '@/data/ranks'
 import { powerSlotCost } from '@/data/powers'
 import { defaultPowerCount } from '@/data/physicalFormPowers'
 import * as gen from '@/generators/generateCharacter'
-import { saveCharacterToDb } from '@/services/characterDb'
+import { insertCharacterToDb, saveCharacterToDb, updateCharacterInDb } from '@/services/characterDb'
 
 export const useCharacterStore = defineStore('character', () => {
   const character = ref<Character>(gen.createDefaultCharacter())
+
+  // DB serial row id this in-memory character was last saved to (null until
+  // the first explicit Save/Save As). Drives "Save" = update-in-place.
+  const savedDbId = ref<number | null>(null)
 
   function touch() {
     character.value.meta.updatedAt = new Date().toISOString()
@@ -271,7 +276,7 @@ export const useCharacterStore = defineStore('character', () => {
   function generatePowerSlot(index: number) {
     const slot = character.value.powers.slots[index]
     if (!slot || slot.locked) return
-    const rolled = gen.rollPower(slot.slot)
+    const rolled = gen.rollPower(slot.slot, skipRulePowersEnabled.value)
     slot.name = rolled.name
     slot.category = rolled.category
     slot.rank = rolled.rank
@@ -436,7 +441,45 @@ export const useCharacterStore = defineStore('character', () => {
     if (slot) slot.locked = !slot.locked
   }
 
+  // -- Contacts ------------------------------------------------------------
+
+  function generateContactCount() {
+    const c = character.value.contacts.count
+    if (c.locked) return
+    const rolled = gen.rollContactCount()
+    c.current = rolled.current
+    c.max = rolled.max
+    touch()
+  }
+
+  function toggleContactCountLock() {
+    character.value.contacts.count.locked = !character.value.contacts.count.locked
+  }
+
   // -- Orchestration ------------------------------------------------------
+
+  /** One d100 roll on the shared Powers/Talents/Contacts table sets all three
+   * counts together (each still respecting its own lock) -- see
+   * gen.rollCharacterCounts. */
+  function generateCounts() {
+    const counts = gen.rollCharacterCounts(character.value.basicInfo.physicalForm.value)
+    const powers = character.value.powers.count
+    const talents = character.value.talents.count
+    const contacts = character.value.contacts.count
+    if (!powers.locked) {
+      powers.current = counts.powers.current
+      powers.max = counts.powers.max
+    }
+    if (!talents.locked) {
+      talents.current = counts.talents.current
+      talents.max = counts.talents.max
+    }
+    if (!contacts.locked) {
+      contacts.current = counts.contacts.current
+      contacts.max = counts.contacts.max
+    }
+    touch()
+  }
 
   /** The book's 7-step order, plus Occupation/Talents which the screenshot
    * shows but rules.pdf doesn't formally cover as their own step.
@@ -456,9 +499,8 @@ export const useCharacterStore = defineStore('character', () => {
     generateResources()
     generatePopularity()
     generateWeakness(skipWeaknessEnabled.value)
-    generatePowerCount()
+    generateCounts()
     generateActivePowerSlots()
-    generateTalentCount()
     generateActiveTalentSlots()
   }
 
@@ -480,6 +522,10 @@ export const useCharacterStore = defineStore('character', () => {
     }
 
     recordHistory()
+    // A (re)generated character is a new roll, not an edit of the previously
+    // saved row -- clear the association so "Save" inserts instead of PUTting
+    // to a stale row id.
+    savedDbId.value = null
     // While "skip characters with weakness" is on, generated characters are
     // kept in the in-app history only -- never written to the database.
     if (autoSaveEnabled.value && !skipWeaknessEnabled.value) {
@@ -489,6 +535,7 @@ export const useCharacterStore = defineStore('character', () => {
 
   function newCharacter() {
     character.value = gen.createDefaultCharacter()
+    savedDbId.value = null
     generateAll()
   }
 
@@ -502,13 +549,27 @@ export const useCharacterStore = defineStore('character', () => {
   const HISTORY_KEY = 'faserip.characterHistory.v1'
   const MAX_HISTORY = 20
 
+  /** schemaVersion-1 characters saved before Contacts gained a count only had
+   * `contacts: { slots }` -- backfill the count so history/import entries match
+   * the current ContactsSection shape. */
+  function normalizeContacts(character: Character): Character {
+    const rawContacts = (character as { contacts?: Partial<Character['contacts']> }).contacts ?? {}
+    character.contacts = {
+      count: rawContacts.count ?? { current: 0, max: 6, locked: false },
+      slots: rawContacts.slots ?? [],
+    }
+    return character
+  }
+
   function loadHistory(): Character[] {
     try {
       const raw = localStorage.getItem(HISTORY_KEY)
       if (!raw) return []
       const parsed = JSON.parse(raw)
       if (!Array.isArray(parsed)) return []
-      return parsed.filter((c) => c && typeof c === 'object' && c.schemaVersion === SCHEMA_VERSION)
+      return parsed
+        .filter((c) => c && typeof c === 'object' && c.schemaVersion === SCHEMA_VERSION)
+        .map((c) => normalizeContacts(c as Character))
     } catch {
       return []
     }
@@ -546,12 +607,16 @@ export const useCharacterStore = defineStore('character', () => {
     if (!canGoBack.value) return
     historyPointer.value -= 1
     character.value = JSON.parse(JSON.stringify(history.value[historyPointer.value]))
+    // Navigating to a different character breaks the "Save = update this row"
+    // association, otherwise Save would overwrite whatever was last saved.
+    savedDbId.value = null
   }
 
   function goForward() {
     if (!canGoForward.value) return
     historyPointer.value += 1
     character.value = JSON.parse(JSON.stringify(history.value[historyPointer.value]))
+    savedDbId.value = null
   }
 
   // -- Auto-save to database -------------------------------------------------
@@ -592,6 +657,24 @@ export const useCharacterStore = defineStore('character', () => {
     }
   }
 
+  // -- Skip Rule Powers -------------------------------------------------------
+  //
+  // When enabled (Options menu), power-category rolls omit the homebrew
+  // "Rule Powers" band (70-75) and fold its range into Mental Enhancements
+  // (58-71) and Physical Enhancements (72-85). Persists across reloads.
+
+  const SKIP_RULE_POWERS_KEY = 'faserip.skipRulePowersEnabled'
+  const skipRulePowersEnabled = ref(localStorage.getItem(SKIP_RULE_POWERS_KEY) === 'true')
+
+  function toggleSkipRulePowers() {
+    skipRulePowersEnabled.value = !skipRulePowersEnabled.value
+    try {
+      localStorage.setItem(SKIP_RULE_POWERS_KEY, String(skipRulePowersEnabled.value))
+    } catch {
+      // Storage full or unavailable -- the toggle still works for this session.
+    }
+  }
+
   // Boot with a fully generated character rather than a wall of blanks --
   // the store is created once per app load, so this runs exactly once.
   // Origin/Physical Form/Occupation are skipped here when a persisted
@@ -615,7 +698,8 @@ export const useCharacterStore = defineStore('character', () => {
         `Unsupported schemaVersion ${parsed.schemaVersion ?? '(missing)'} -- this app reads version ${SCHEMA_VERSION}.`,
       )
     }
-    character.value = parsed as Character
+    character.value = normalizeContacts(parsed as Character)
+    savedDbId.value = null
     touch()
   }
 
@@ -623,6 +707,26 @@ export const useCharacterStore = defineStore('character', () => {
     const { health, karma } = character.value.secondaryAbilities
     return `${health.value} / ${karma.value}`
   })
+
+  // -- Save / Save As to database ------------------------------------------
+  //
+  // "Save" updates the row this character was last saved to (or inserts a new
+  // one on first save). "Save As" always inserts a fresh row -- with a fresh
+  // character_id -- leaving any existing record untouched.
+
+  async function saveToDatabase() {
+    if (savedDbId.value != null) {
+      await updateCharacterInDb(savedDbId.value, character.value)
+    } else {
+      const { id } = await insertCharacterToDb(character.value)
+      savedDbId.value = id
+    }
+  }
+
+  async function saveAsToDatabase() {
+    const { id } = await insertCharacterToDb(character.value, uuidv4())
+    savedDbId.value = id
+  }
 
   return {
     character,
@@ -661,10 +765,14 @@ export const useCharacterStore = defineStore('character', () => {
     generateActiveTalentSlots,
     setTalentName,
     toggleTalentSlotLock,
+    generateContactCount,
+    toggleContactCountLock,
     generateAll,
     newCharacter,
     exportJSON,
     importJSON,
+    saveToDatabase,
+    saveAsToDatabase,
     history,
     historyPointer,
     canGoBack,
@@ -675,5 +783,7 @@ export const useCharacterStore = defineStore('character', () => {
     toggleAutoSave,
     skipWeaknessEnabled,
     toggleSkipWeakness,
+    skipRulePowersEnabled,
+    toggleSkipRulePowers,
   }
 })

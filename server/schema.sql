@@ -73,5 +73,5 @@ CREATE INDEX IF NOT EXISTS idx_characters_abilities_powers ON public."characters
   (strength DESC, reason DESC, endurance DESC, agility DESC)
   WHERE powers IS NOT NULL;
 
-CREATE INDEX idx_json_properties ON characters USING gin (powers);
+CREATE INDEX IF NOT EXISTS idx_json_properties ON characters USING gin (powers);
 

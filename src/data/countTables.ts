@@ -3,11 +3,9 @@
 // earlier placeholder (a flat uniform roll over an arbitrary span) now that
 // the real book table has been sourced.
 //
-// The scanned table's Powers row for 67-75 read "2/8", which breaks the
-// column's otherwise strictly-ascending current sequence
-// (1,2,3,4,5,_,7,8,9,10,12,14) -- corrected to 6/8 here as the near-certain
-// intended value (2 and 6 are an easy misread in a worn scan). Worth
-// double-checking against the physical book if exact odds matter.
+// Values are taken verbatim from number_of_powers.csv (the book's
+// Powers/Talents/Contacts starting-count table), including the 67-75 Powers
+// row's "2/8" exactly as the file provides it.
 
 import type { RollRange } from '@/types/reference'
 
@@ -26,7 +24,7 @@ export const POWERS_COUNT_TABLE: CountRoll[] = [
   row(27, 41, 3, 5),
   row(42, 55, 4, 6),
   row(56, 66, 5, 7),
-  row(67, 75, 6, 8), // scanned as 2/8 -- corrected, see header note
+  row(67, 75, 2, 8), // as provided in number_of_powers.csv
   row(76, 83, 7, 9),
   row(84, 89, 8, 10),
   row(90, 94, 9, 12),

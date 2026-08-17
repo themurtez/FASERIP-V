@@ -2,6 +2,7 @@
 import Fieldset from 'primevue/fieldset'
 import Textarea from 'primevue/textarea'
 import Message from 'primevue/message'
+import CountControl from '@/components/shared/CountControl.vue'
 import RankControl from '@/components/shared/RankControl.vue'
 import SectionLegend from '@/components/shared/SectionLegend.vue'
 import { useCharacterStore } from '@/stores/character'
@@ -32,10 +33,17 @@ const store = useCharacterStore()
     </Fieldset>
 
     <Fieldset legend="Contacts" class="page-two__contacts">
+      <CountControl
+        label="Number of Contacts"
+        :current="store.character.contacts.count.current"
+        :max="store.character.contacts.count.max"
+        :locked="store.character.contacts.count.locked"
+        @reroll="store.generateContactCount()"
+        @toggle-lock="store.toggleContactCountLock()"
+      />
       <Message severity="secondary" :closable="false">
-        Stub -- Contacts generation rules aren't in the provided rules.pdf excerpt (see PLAN.md §6/§9). Body-type
-        modifiers mention which Contacts a character starts with (e.g. "the lab that created them"); wire that
-        up here once the full Contacts table is sourced.
+        Contact names aren't auto-generated yet -- only the starting count (from the Powers/Talents/Contacts
+        table) is rolled here.
       </Message>
     </Fieldset>
 

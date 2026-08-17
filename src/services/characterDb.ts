@@ -1,8 +1,12 @@
-// Auto-save: POSTs a generated character to the Postgres-backed API
-// (server/index.js) when the Options menu's "Auto-Save to Database" toggle
-// is on. Fire-and-forget from the caller's perspective -- failures are
-// logged, not surfaced as UI errors, since this runs after every generation
-// and shouldn't interrupt the character sheet over a transient network blip.
+// Character -> database persistence (server/index.js):
+//
+// - saveCharacterToDb: auto-save (Options menu toggle) -- fire-and-forget
+//   insert, failures logged rather than surfaced as UI errors.
+// - insertCharacterToDb: explicit "Save" (first save) / "Save As" -- inserts
+//   a row, returns its DB id, and throws on failure so the caller can show it.
+// - updateCharacterInDb: explicit "Save" (subsequent saves) -- updates the
+//   existing row in place, leaving its character_id and created_at untouched.
+// - saveCharactersBulk: bulk-generate path, throws on failure.
 
 import type { Character } from '@/types/character'
 
@@ -102,16 +106,43 @@ export function toCharacterDbPayload(character: Character): CharacterDbPayload {
 
 export async function saveCharacterToDb(character: Character): Promise<void> {
   try {
-    const res = await fetch('/api/characters', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(toCharacterDbPayload(character)),
-    })
-    if (!res.ok) {
-      console.error('Auto-save failed:', res.status, await res.text().catch(() => ''))
-    }
+    await insertCharacterToDb(character)
   } catch (err) {
     console.error('Auto-save failed:', err)
+  }
+}
+
+/** Explicit "Save"/"Save As": inserts a new row and returns its DB id. A
+ * distinct `characterId` override lets "Save As" create a separate record
+ * without changing the in-app character's own id. Throws on failure so the
+ * caller can surface it in the UI. */
+export async function insertCharacterToDb(
+  character: Character,
+  characterId?: string,
+): Promise<{ id: number }> {
+  const payload = toCharacterDbPayload(character)
+  if (characterId) payload.characterId = characterId
+  const res = await fetch('/api/characters', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  if (!res.ok) {
+    throw new Error(`Save failed (${res.status}): ${await res.text().catch(() => res.statusText)}`)
+  }
+  return (await res.json()) as { id: number }
+}
+
+/** Explicit "Save": updates the existing row (by DB serial id) in place.
+ * character_id is left untouched so a "Save As" copy keeps its own id. */
+export async function updateCharacterInDb(id: number, character: Character): Promise<void> {
+  const res = await fetch(`/api/characters/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(toCharacterDbPayload(character)),
+  })
+  if (!res.ok) {
+    throw new Error(`Save failed (${res.status}): ${await res.text().catch(() => res.statusText)}`)
   }
 }
 

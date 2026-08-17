@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid'
 import type {
   BasicInfo,
   Character,
-  ContactSlot,
+  ContactsSection,
   PowerSlot,
   PowersSection,
   PrimaryAbilities,
@@ -26,11 +26,17 @@ import type {
 } from '@/types/character'
 import { MAX_POWER_SLOTS, MAX_TALENT_SLOTS, PRIMARY_ABILITY_KEYS } from '@/types/character'
 import type { RandomRanksColumn } from '@/types/reference'
-import { pickFromRanges, pickUniform } from './dice'
+import { pickFromRanges, pickUniform, rollPercentile } from './dice'
 import { rankTier, rankIndex, RANK_TIERS, shiftRank } from '@/data/ranks'
-import { PHYSICAL_FORMS, physicalFormByName } from '@/data/physicalForms'
+import { physicalFormByName } from '@/data/physicalForms'
 import { PHYSICAL_FORM_TABLE, PHYSICAL_FORM_TABLE_NAME_MAP } from '@/data/physicalFormTable'
-import { COMPOUND_NUMBER_TABLE } from '@/data/countTables'
+import {
+  COMPOUND_NUMBER_TABLE,
+  CONTACTS_COUNT_TABLE,
+  POWERS_COUNT_TABLE,
+  TALENTS_COUNT_TABLE,
+  type CountRoll,
+} from '@/data/countTables'
 import {
   abilityBonusForForm,
   secondaryBonusForForm,
@@ -43,9 +49,8 @@ import { OCCUPATIONS } from '@/data/occupations'
 import { WEAKNESS_STIMULUS, WEAKNESS_EFFECT, WEAKNESS_DURATION, NO_INHERENT_WEAKNESS } from '@/data/weaknesses'
 import { rankRangesForColumn } from '@/data/randomRanksTable'
 import { ABILITY_MODIFIER_TABLE } from '@/data/abilityModifierTable'
-import { POWERS_COUNT_TABLE, TALENTS_COUNT_TABLE } from '@/data/countTables'
 import { POWERS, powersByCategory, powerByName, powerSlotCost } from '@/data/powers'
-import { POWER_CATEGORIES_TABLE } from '@/data/powerCategories'
+import { POWER_CATEGORIES_TABLE, POWER_CATEGORIES_TABLE_SKIP_RULE_POWERS } from '@/data/powerCategories'
 import { TALENTS, talentByName } from '@/data/talents'
 
 // ---------------------------------------------------------------------------
@@ -195,12 +200,42 @@ export function racialPowerCountBonus(physicalFormName: string): number {
   return powerCountBonusForForm(physicalFormName)
 }
 
-export function rollPowerCount(physicalFormName: string): { current: number; max: number } {
+/** Applies a Physical Form's flat Power-count bonus to a table row and
+ * clamps the result into [0, MAX_POWER_SLOTS]. Shared by the single-track
+ * roll and the combined Powers/Talents/Contacts roll below so the two can't
+ * drift apart. */
+function powerCountFromRoll(roll: CountRoll, physicalFormName: string): { current: number; max: number } {
   const bonus = racialPowerCountBonus(physicalFormName)
-  const roll = pickFromRanges(POWERS_COUNT_TABLE)
   const max = Math.min(MAX_POWER_SLOTS, Math.max(1, roll.cap + bonus))
   const current = Math.min(max, Math.max(0, roll.current + bonus))
   return { current, max }
+}
+
+export function rollPowerCount(physicalFormName: string): { current: number; max: number } {
+  return powerCountFromRoll(pickFromRanges(POWERS_COUNT_TABLE), physicalFormName)
+}
+
+export interface CharacterCounts {
+  powers: { current: number; max: number }
+  talents: { current: number; max: number }
+  contacts: { current: number; max: number }
+}
+
+/** The book's "Number of Powers/Talents/Contacts" table (number_of_powers.csv
+ * / countTables.ts) is a single d100 roll whose row supplies all three tracks.
+ * Full-generation callers use this so Powers, Talents, and Contacts always
+ * come from the same die roll; the individual rollPowerCount/rollTalentCount/
+ * rollContactCount exports remain for the per-section reroll buttons. */
+export function rollCharacterCounts(physicalFormName: string): CharacterCounts {
+  const roll = rollPercentile()
+  const powers = pickFromRanges(POWERS_COUNT_TABLE, roll)
+  const talents = pickFromRanges(TALENTS_COUNT_TABLE, roll)
+  const contacts = pickFromRanges(CONTACTS_COUNT_TABLE, roll)
+  return {
+    powers: powerCountFromRoll(powers, physicalFormName),
+    talents: { current: talents.current, max: talents.cap },
+    contacts: { current: contacts.current, max: contacts.cap },
+  }
 }
 
 /** A Power's starting rank -- rolled on Random Ranks Table column 4, unless
@@ -218,15 +253,18 @@ function resolvePowerRank(explicitRank?: RankName): { rank: RankName; rankNumber
 /** Rolls a Power category on the Ultimate Powers Table (d100), then a
  * specific Power uniformly within that category -- matches the book's
  * two-step "roll category, then roll within it" procedure, rather than a
- * single flat pick across all categories' Powers. */
-function rollPowerEntry() {
-  const category = pickFromRanges(POWER_CATEGORIES_TABLE)
+ * single flat pick across all categories' Powers. When `skipRulePowers` is
+ * true, the homebrew "Rule Powers" band is omitted and its range folded into
+ * Mental/Physical Enhancements (see powerCategories.ts). */
+function rollPowerEntry(skipRulePowers = false) {
+  const table = skipRulePowers ? POWER_CATEGORIES_TABLE_SKIP_RULE_POWERS : POWER_CATEGORIES_TABLE
+  const category = pickFromRanges(table)
   const pool = powersByCategory(category.name)
   return pool.length ? pickUniform(pool) : pickUniform(POWERS)
 }
 
-export function rollPower(slot: number): PowerSlot {
-  const entry = rollPowerEntry()
+export function rollPower(slot: number, skipRulePowers = false): PowerSlot {
+  const entry = rollPowerEntry(skipRulePowers)
   const { rank, rankNumber } = resolvePowerRank()
   return {
     slot,
@@ -289,6 +327,11 @@ export function rollDefaultPowers(physicalFormName: string): DefaultPowerRoll[] 
 
 export function rollTalentCount(): { current: number; max: number } {
   const roll = pickFromRanges(TALENTS_COUNT_TABLE)
+  return { current: roll.current, max: roll.cap }
+}
+
+export function rollContactCount(): { current: number; max: number } {
+  const roll = pickFromRanges(CONTACTS_COUNT_TABLE)
   return { current: roll.current, max: roll.cap }
 }
 
@@ -370,8 +413,8 @@ function emptyTalents(): TalentsSection {
   return { count: { current: 0, max: 4, locked: false }, slots: emptyTalentSlots() }
 }
 
-function emptyContacts(): { slots: ContactSlot[] } {
-  return { slots: [] }
+function emptyContacts(): ContactsSection {
+  return { count: { current: 0, max: 6, locked: false }, slots: [] }
 }
 
 function emptyWeakness(): Weakness {
@@ -436,16 +479,16 @@ export function rollNewCharacter(overrides: CharacterOverrides = {}): Character 
     popularity: { rank: popularityTier.name, rankNumber: popularityTier.rankNumber, locked: false },
   }
 
-  const powerCount = rollPowerCount(physicalForm)
+  const counts = rollCharacterCounts(physicalForm)
   const forcedPowers = rollDefaultPowers(physicalForm)
   let forcedIndex = 0
-  let remainingBudget = powerCount.current
+  let remainingBudget = counts.powers.current
   const powerSlots: PowerSlot[] = Array.from({ length: MAX_POWER_SLOTS }, (_, i) => {
     // Racially-guaranteed powers (e.g. Demon's Fire Generation + True
     // Invulnerability) always get a slot, even once the random power-count
     // roll's budget is exhausted -- see rollNewCharacter's doc comment.
     const grant = forcedIndex < forcedPowers.length ? forcedPowers[forcedIndex] : undefined
-    if (!grant && (i >= powerCount.current || remainingBudget <= 0)) {
+    if (!grant && (i >= counts.powers.current || remainingBudget <= 0)) {
       return { slot: i + 1, name: '', category: '', rank: '' as const, rankNumber: 0, locked: false }
     }
     let rolled: PowerSlot
@@ -459,9 +502,8 @@ export function rollNewCharacter(overrides: CharacterOverrides = {}): Character 
     return rolled
   })
 
-  const talentCount = rollTalentCount()
   const talentSlots: TalentSlot[] = Array.from({ length: MAX_TALENT_SLOTS }, (_, i) =>
-    i < talentCount.current ? rollTalent(i + 1) : { slot: i + 1, name: '', locked: false },
+    i < counts.talents.current ? rollTalent(i + 1) : { slot: i + 1, name: '', locked: false },
   )
 
   return {
@@ -488,9 +530,9 @@ export function rollNewCharacter(overrides: CharacterOverrides = {}): Character 
     primaryAbilities,
     secondaryAbilities,
     weakness: rollWeakness(),
-    powers: { count: { current: powerCount.current, max: powerCount.max, locked: false }, slots: powerSlots },
-    talents: { count: { current: talentCount.current, max: talentCount.max, locked: false }, slots: talentSlots },
-    contacts: { slots: [] },
+    powers: { count: { current: counts.powers.current, max: counts.powers.max, locked: false }, slots: powerSlots },
+    talents: { count: { current: counts.talents.current, max: counts.talents.max, locked: false }, slots: talentSlots },
+    contacts: { count: { current: counts.contacts.current, max: counts.contacts.max, locked: false }, slots: [] },
     background: '',
   }
 }

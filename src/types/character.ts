@@ -139,6 +139,11 @@ export interface ContactSlot {
   locked: boolean
 }
 
+export interface ContactsSection {
+  count: { current: number; max: number; locked: boolean }
+  slots: ContactSlot[]
+}
+
 export interface Character {
   schemaVersion: number
   id: string
@@ -149,6 +154,6 @@ export interface Character {
   weakness: Weakness
   powers: PowersSection
   talents: TalentsSection
-  contacts: { slots: ContactSlot[] }
+  contacts: ContactsSection
   background: string
 }

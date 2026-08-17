@@ -67,6 +67,40 @@ app.post('/api/characters', async (req, res) => {
   }
 })
 
+// Explicit "Save" path: updates every data column of an existing row in
+// place. character_id, id, and created_at are left untouched so a "Save As"
+// copy keeps its own identity and timestamp. The client keeps the row's
+// serial `id` from the original POST and sends it back here.
+app.put('/api/characters/:id', async (req, res) => {
+  const id = Number(req.params.id)
+  if (!Number.isInteger(id) || id <= 0) {
+    res.status(400).json({ error: 'Invalid character id.' })
+    return
+  }
+
+  const b = req.body ?? {}
+  const updateColumns = CHARACTER_COLUMNS.filter((column) => column !== 'character_id')
+  // characterRowValues(b)[0] is characterId, which sits at column 0 -- after
+  // dropping that column from the SET list, slice(1) gives matching values.
+  const values = characterRowValues(b).slice(1)
+
+  try {
+    const assignments = updateColumns.map((column, i) => `${column} = $${i + 1}`).join(', ')
+    const result = await pool.query(
+      `UPDATE characters SET ${assignments} WHERE id = $${updateColumns.length + 1} RETURNING id, created_at`,
+      [...values, id],
+    )
+    if (result.rowCount === 0) {
+      res.status(404).json({ error: 'Character not found.' })
+      return
+    }
+    res.json(result.rows[0])
+  } catch (err) {
+    console.error('PUT /api/characters/:id failed:', err)
+    res.status(500).json({ error: String(err) })
+  }
+})
+
 // Bulk-generate save path (see src/components/dialogs/BulkGenerateDialog.vue):
 // accepts an arbitrarily large `characters` array in one request and inserts
 // it in chunked multi-row statements inside a single transaction, rather

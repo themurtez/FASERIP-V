@@ -53,6 +53,34 @@ function handleNew() {
   toast.add({ severity: 'info', summary: 'New character generated', life: 2000 })
 }
 
+async function handleSaveToDb() {
+  try {
+    await store.saveToDatabase()
+    toast.add({ severity: 'success', summary: 'Saved to database', life: 2500 })
+  } catch (err) {
+    toast.add({
+      severity: 'error',
+      summary: 'Save failed',
+      detail: err instanceof Error ? err.message : String(err),
+      life: 6000,
+    })
+  }
+}
+
+async function handleSaveAsToDb() {
+  try {
+    await store.saveAsToDatabase()
+    toast.add({ severity: 'success', summary: 'Saved as new database record', life: 2500 })
+  } catch (err) {
+    toast.add({
+      severity: 'error',
+      summary: 'Save As failed',
+      detail: err instanceof Error ? err.message : String(err),
+      life: 6000,
+    })
+  }
+}
+
 function handleGenerateAll() {
   store.generateAll()
 }
@@ -140,11 +168,26 @@ function toggleSkipWeakness() {
   })
 }
 
+function toggleSkipRulePowers() {
+  store.toggleSkipRulePowers()
+  toast.add({
+    severity: 'info',
+    summary: store.skipRulePowersEnabled ? 'Skip Rule Powers enabled' : 'Skip Rule Powers disabled',
+    detail: store.skipRulePowersEnabled
+      ? 'Rule Powers are omitted; 70-75 is folded into Mental (58-71) and Physical Enhancements (72-85).'
+      : undefined,
+    life: 3000,
+  })
+}
+
 const menuItems = computed(() => [
   {
     label: 'File',
     items: [
       { label: 'New Character', icon: 'pi pi-file', command: handleNew },
+      { separator: true },
+      { label: 'Save to Database', icon: 'pi pi-save', command: handleSaveToDb },
+      { label: 'Save As to Database…', icon: 'pi pi-clone', command: handleSaveAsToDb },
       { separator: true },
       { label: 'Import JSON…', icon: 'pi pi-upload', command: triggerImport },
       { label: 'Export JSON…', icon: 'pi pi-download', command: () => (exportDialogVisible.value = true) },
@@ -205,6 +248,11 @@ const menuItems = computed(() => [
         icon: store.skipWeaknessEnabled ? 'pi pi-check-square' : 'pi pi-stop',
         command: toggleSkipWeakness,
       },
+      {
+        label: store.skipRulePowersEnabled ? 'Skip Rule Powers: On' : 'Skip Rule Powers: Off',
+        icon: store.skipRulePowersEnabled ? 'pi pi-check-square' : 'pi pi-stop',
+        command: toggleSkipRulePowers,
+      },
       { separator: true },
       { label: 'Contacts & Background (page 2)', icon: 'pi pi-id-card', command: () => notImplemented('Contacts & Background') },
       { label: 'About', icon: 'pi pi-info-circle', command: () => notImplemented('About') },
@@ -255,6 +303,24 @@ const menuItems = computed(() => [
           size="small"
           v-tooltip.bottom="'Regenerate everything except locked fields'"
           @click="handleGenerateAll"
+        />
+        <Button
+          icon="pi pi-save"
+          size="small"
+          severity="secondary"
+          text
+          v-tooltip.bottom="'Save to Database'"
+          aria-label="Save to Database"
+          @click="handleSaveToDb"
+        />
+        <Button
+          icon="pi pi-clone"
+          size="small"
+          severity="secondary"
+          text
+          v-tooltip.bottom="'Save As to Database'"
+          aria-label="Save As to Database"
+          @click="handleSaveAsToDb"
         />
       </template>
     </template>
